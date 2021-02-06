@@ -28,6 +28,7 @@
 		<commons-lang3.version>3.11</commons-lang3.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 
+		<springfox-swagger2.version>2.9.2</springfox-swagger2.version>
 
 	</properties>
 	<dependencies>
@@ -113,7 +114,6 @@
 		</dependency>
 		<!-- Json End -->
 
-
 <!--		custom dependencies start -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -126,18 +126,18 @@
 			<version>${commons-collections4.version}</version>
 		</dependency>
 
-		<!--		Prevent Class Not Found Exception-->
-<!--		<dependency>-->
-<!--			<groupId>org.javassist</groupId>-->
-<!--			<artifactId>javassist</artifactId>-->
-<!--			<version>${javaassist.version}</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>cglib</groupId>-->
-<!--			<artifactId>cglib-nodep</artifactId>-->
-<!--			<version>${cglib.nodep.version}</version>-->
-<!--		</dependency>-->
-<!--		custom dependencies end -->
+<!--		Swagger -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${springfox-swagger2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${springfox-swagger2.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
