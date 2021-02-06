@@ -26,7 +26,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProjectService extends BaseService {
-    private final DummyService dummyService;
     private final ProjectObjectMapper mapper;
     private final ProjectRepository projectRepository;
 
@@ -48,7 +47,7 @@ public class ProjectService extends BaseService {
         return ResponseUtil.createSuccessResponse(mapper.mapToProjectModel(entity));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Response<List<ProjectModel>> getAllProjects(){
         List<ProjectEntity> projectEntities = projectRepository.getAll();
         if(CollectionUtils.isEmpty(projectEntities))
@@ -57,12 +56,21 @@ public class ProjectService extends BaseService {
         return ResponseUtil.createSuccessResponse(mapper.mapToProjectModel(projectEntities));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Response<List<ProjectModel>> getByUserName(String userName){
         List<ProjectEntity> projectEntities = projectRepository.getByUserName(userName);
         if(CollectionUtils.isEmpty(projectEntities))
             return ResponseUtil.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Record Not Found");
 
         return ResponseUtil.createSuccessResponse(mapper.mapToProjectModel(projectEntities));
+    }
+
+    @Transactional(readOnly = true)
+    public Response<ProjectModel> getById(long id){
+        Optional<ProjectEntity> entityOptional = projectRepository.getOpt(id);
+        if(entityOptional.isEmpty())
+            return ResponseUtil.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Project Not Found");
+
+        return ResponseUtil.createSuccessResponse(mapper.mapToProjectModel(entityOptional.get()));
     }
 }

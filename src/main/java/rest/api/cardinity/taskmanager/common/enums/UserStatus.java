@@ -9,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum Status {
+public enum UserStatus {
 
     ACTIVE(1, "Active"),
     CLOSED(2, "Closed"),
@@ -20,15 +20,15 @@ public enum Status {
     private String value;
 
     public static String getValueByCode(int code){
-        for(Status status : Status.values()){
-            if(status.getCode() == code)
-                return status.getValue();
+        for(UserStatus userStatus : UserStatus.values()){
+            if(userStatus.getCode() == code)
+                return userStatus.getValue();
         }
         return "";
     }
 
     public static boolean isActive(int code){
-        return (Status.ACTIVE.getCode() == code);
+        return (UserStatus.ACTIVE.getCode() == code);
     }
 
     public static boolean isInactive(int code){

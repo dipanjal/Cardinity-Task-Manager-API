@@ -1,9 +1,7 @@
 package rest.api.cardinity.taskmanager.common.mappers;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import rest.api.cardinity.taskmanager.common.enums.Status;
-import rest.api.cardinity.taskmanager.common.utils.CStringUtils;
+import rest.api.cardinity.taskmanager.common.enums.UserStatus;
 import rest.api.cardinity.taskmanager.common.utils.DateTimeUtils;
 import rest.api.cardinity.taskmanager.models.entity.ProjectEntity;
 import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
@@ -54,7 +52,7 @@ public class ProjectObjectMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
-                Status.getValueByCode(entity.getStatus()),
+                UserStatus.getValueByCode(entity.getStatus()),
                 DateTimeUtils.formatDate(entity.getCreatedAt()),
                 DateTimeUtils.formatDate(entity.getUpdatedAt()),
                 entity.getCreatedBy().getName()

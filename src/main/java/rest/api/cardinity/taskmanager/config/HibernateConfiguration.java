@@ -32,16 +32,15 @@ public class HibernateConfiguration {
     @Value("${db.password}")
     private String password;
 
-//    @Value("${hibernate.dialect}")
-//    private String dialect;
     @Value("${hibernate.hbm2ddl.auto}")
     private String ddlAuto;
     @Value("${hibernate.show_sql}")
     private String showSql;
     @Value("${hibernate.format_sql}")
     private String formatSql;
-    @Value("${spring.datasource.initialization-mode}")
-    private String dataSourceInitialization;
+    @Value("${hibernate.enable_lazy_loading}")
+    private boolean lazyLoading;
+
 
 
 
@@ -61,8 +60,7 @@ public class HibernateConfiguration {
         properties.put("hibernate.hbm2ddl.auto", ddlAuto);
         properties.put("hibernate.show_sql", showSql);
         properties.put("hibernate.format_sql", formatSql);
-        properties.put("spring.jpa.hibernate.ddl-auto", "none");
-        properties.put("spring.datasource.initialization-mode", dataSourceInitialization);
+        properties.put("hibernate.enable_lazy_load_no_trans", lazyLoading);
         return properties;
     }
 
