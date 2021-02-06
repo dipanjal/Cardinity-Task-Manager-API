@@ -31,6 +31,6 @@ public class UserDetailEntity extends BaseEntity {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "userDetailEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userDetailEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserRoleMapEntity> userRoleMaps;
 }
