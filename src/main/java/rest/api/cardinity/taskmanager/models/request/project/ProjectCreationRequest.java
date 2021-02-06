@@ -8,8 +8,4 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 public class ProjectCreationRequest extends BaseProjectRequest {
-
-    public ProjectCreationRequest(String name, String description, int status) {
-        super(name, description, status);
-    }
 }

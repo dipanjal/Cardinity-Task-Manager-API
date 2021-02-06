@@ -30,10 +30,4 @@ public class DummyController {
     public Response<List<UserDetailModel>> fetchDummyUsers(){
         return dummyService.getDummyUsers();
     }
-
-/*    @GetMapping("/users/roles")
-    public Response<List<UserRoleMapEntity>> fetchDummyUserRoles(){
-        return dummyService.getUserRoles();
-    }*/
-
 }

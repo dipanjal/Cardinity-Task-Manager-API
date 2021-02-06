@@ -14,6 +14,7 @@ import rest.api.cardinity.taskmanager.models.request.project.ProjectUpdateReques
 import rest.api.cardinity.taskmanager.models.response.Response;
 import rest.api.cardinity.taskmanager.models.view.ProjectModel;
 import rest.api.cardinity.taskmanager.repository.ProjectRepository;
+import rest.api.cardinity.taskmanager.repository.service.UserDetailEntityService;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -28,10 +29,16 @@ import java.util.Optional;
 public class ProjectService extends BaseService {
     private final ProjectObjectMapper mapper;
     private final ProjectRepository projectRepository;
+    private final UserDetailEntityService userEntityService;
 
     @Transactional
     public Response<ProjectModel> createNewProject(ProjectCreationRequest request, UserDetailEntity currentUser){
-        ProjectEntity entity = mapper.getNewProjectEntity(request, currentUser);
+
+        Response<UserDetailEntity> assignedUserResponse = userEntityService.getByUserName(request.getAssignedTo());
+        if(ResponseCode.isNotSuccessful(assignedUserResponse))
+            return ResponseUtil.copyResponse(assignedUserResponse);
+
+        ProjectEntity entity = mapper.getNewProjectEntity(request, assignedUserResponse.getItems(), currentUser);
         projectRepository.create(entity);
         return ResponseUtil.createSuccessResponse(mapper.mapToProjectModel(entity));
     }

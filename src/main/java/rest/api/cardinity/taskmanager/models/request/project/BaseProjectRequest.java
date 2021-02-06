@@ -20,4 +20,5 @@ public abstract class BaseProjectRequest implements Serializable {
     private String name;
     private String description;
     private int status;
+    private String assignedTo;
 }

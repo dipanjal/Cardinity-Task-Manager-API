@@ -6,7 +6,10 @@ import rest.api.cardinity.taskmanager.models.entity.base.BaseUpdatableEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author dipanjal
@@ -17,9 +20,12 @@ import javax.persistence.Table;
 @Getter
 @Setter
 public class ProjectEntity extends BaseUpdatableEntity {
-
     @Column(name = "name")
     private String name;
     @Column(name = "description")
     private String description;
+
+    @ManyToMany(mappedBy = "projects")
+    private Set<UserDetailEntity> users = new HashSet<>();
+
 }
