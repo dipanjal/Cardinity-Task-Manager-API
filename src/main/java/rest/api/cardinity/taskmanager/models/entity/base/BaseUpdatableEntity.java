@@ -15,12 +15,12 @@ import java.util.Date;
 @Setter
 @MappedSuperclass
 public abstract class BaseUpdatableEntity extends BaseEntity {
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "created_by", updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "created_by", nullable = false)
     private UserDetailEntity createdBy;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "updated_by", updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "updated_by", nullable = false)
     private UserDetailEntity updatedBy;
 
     @Column(name = "updated_at")

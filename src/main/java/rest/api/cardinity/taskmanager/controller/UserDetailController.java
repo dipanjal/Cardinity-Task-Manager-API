@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class UserDetailServiceController {
+public class UserDetailController {
 
     private final UserDetailService userDetailService;
 

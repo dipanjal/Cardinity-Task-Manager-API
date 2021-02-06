@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public final class DateTimeUtils {
@@ -48,6 +49,17 @@ public final class DateTimeUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Date addHour(Date date, int hour) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR, hour);
+        return calendar.getTime();
+    }
+
+    public static Date expireAtHour(int hour){
+        return addHour(new Date(), hour);
     }
 
 }

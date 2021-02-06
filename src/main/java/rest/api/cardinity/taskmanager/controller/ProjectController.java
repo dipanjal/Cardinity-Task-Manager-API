@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/project")
 @RequiredArgsConstructor
-public class ProjectServiceController extends BaseController {
+public class ProjectController extends BaseController {
     private final ProjectService projectService;
 
     @PostMapping("/create")

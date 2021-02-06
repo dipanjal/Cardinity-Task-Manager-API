@@ -35,6 +35,15 @@ public class ResponseUtil {
         return response;
     }
 
+    public static  <T> Response<T> createSuccessResponse(T item){
+        return createResponse(
+                ResponseCode.OPERATION_SUCCESSFUL.getCode(),
+                null,
+                item,
+                null
+        );
+    }
+
     public static  <T> Response<T> copyResponse(Response<T> response, Response sourceResponse, Class<T> dataClass){
         response = response == null ? new Response<>() : response;
         response.setResponseCode(sourceResponse.getResponseCode());
@@ -52,15 +61,13 @@ public class ResponseUtil {
         return response;
     }
 
-
-    public static  <T> Response<T> createSuccessResponse(T item){
-        return createResponse(
-                ResponseCode.OPERATION_SUCCESSFUL.getCode(),
-                null,
-                item,
-                null
-        );
+    public static  <T> Response<T> copyResponse(Response sourceResponse){
+        Response<T> response = new Response<>();
+        response.setResponseCode(sourceResponse.getResponseCode());
+        response.setResponseMessages(sourceResponse.getResponseMessages());
+        return response;
     }
+
 
     public static String joinResponseMessgae(List<String> violationMessages){
         return CollectionUtils.isNotEmpty(violationMessages)
