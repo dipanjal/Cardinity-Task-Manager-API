@@ -30,6 +30,4 @@ public class DummyController {
     public Response<List<UserDetailModel>> fetchDummyUsers(){
         return dummyService.getDummyUsers();
     }
-
-
 }

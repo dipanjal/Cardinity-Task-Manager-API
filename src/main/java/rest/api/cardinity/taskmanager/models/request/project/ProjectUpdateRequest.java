@@ -13,11 +13,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ProjectUpdateRequest extends BaseProjectRequest {
-
     private long projectId;
-
-    public ProjectUpdateRequest(long projectId, String name, String description, int status) {
-        super(name, description, status);
-        this.projectId = projectId;
-    }
 }

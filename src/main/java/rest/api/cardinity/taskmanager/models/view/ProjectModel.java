@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.catalina.LifecycleState;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author dipanjal
@@ -24,4 +26,5 @@ public class ProjectModel implements Serializable {
     private String createdAt;
     private String updatedAt;
     private String createdBy;
+    private List<UserDetailModel> assignedUsers;
 }

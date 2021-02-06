@@ -7,7 +7,9 @@ import lombok.ToString;
 import rest.api.cardinity.taskmanager.models.entity.base.BaseEntity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author dipanjal
@@ -33,4 +35,12 @@ public class UserDetailEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "userDetailEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserRoleMapEntity> userRoleMaps;
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "User_Project",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "project_id") }
+    )
+    Set<ProjectEntity> projects = new HashSet<>();
 }

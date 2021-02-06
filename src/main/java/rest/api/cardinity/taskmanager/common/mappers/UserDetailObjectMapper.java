@@ -8,6 +8,7 @@ import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
 import rest.api.cardinity.taskmanager.models.entity.UserRoleMapEntity;
 import rest.api.cardinity.taskmanager.models.view.UserDetailModel;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ public class UserDetailObjectMapper {
         );
     }
 
-    public List<UserDetailModel> mapToUserDetailModel(List<UserDetailEntity> entityList){
+    public List<UserDetailModel> mapToUserDetailModel(Collection<UserDetailEntity> entityList){
         return entityList
                 .stream()
                 .map(this::mapToUserDetailModel)
