@@ -2,6 +2,9 @@ package rest.api.cardinity.taskmanager.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rest.api.cardinity.taskmanager.common.enums.ResponseCode;
@@ -13,6 +16,7 @@ import rest.api.cardinity.taskmanager.models.view.UserDetailModel;
 import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author dipanjal
@@ -20,7 +24,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class UserDetailService extends BaseService {
+public class CardinityUserDetailService extends BaseService implements UserDetailsService {
 
     private final UserDetailRepository userDetailRepository;
     protected final UserDetailObjectMapper mapper;
@@ -31,5 +35,14 @@ public class UserDetailService extends BaseService {
         if(CollectionUtils.isEmpty(userDetailEntities))
             return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No user found");
         return ResponseUtils.createSuccessResponse(mapper.mapToUserDetailModel(userDetailEntities));
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        Optional<UserDetailEntity> opt = userDetailRepository.getByUserNameOpt(userName);
+        if(opt.isEmpty())
+            throw new UsernameNotFoundException(userName +" User cannot be found");
+        return mapper.mapToUserModel(opt.get());
     }
 }
