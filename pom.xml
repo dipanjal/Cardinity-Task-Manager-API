@@ -22,20 +22,25 @@
 		<maven.compiler.version>3.8.1</maven.compiler.version>
 		<javaassist.version>3.23.1-GA</javaassist.version>
 		<cglib.nodep.version>3.2.7</cglib.nodep.version>
-
 		<commons.dbcp2.version>2.7.0</commons.dbcp2.version>
 		<jackson.core.version>2.11.2</jackson.core.version>
 		<commons-lang3.version>3.11</commons-lang3.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
+		<springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+		<javax.validation-api.version>2.0.1.Final</javax.validation-api.version>
+		<javax.el.validation.version>3.0.0</javax.el.validation.version>
+		<hibernate.validator.version>6.1.5.Final</hibernate.validator.version>
+		<jjwt.version>0.9.1</jjwt.version>
+		<jaxb-api.version>2.3.0</jaxb-api.version>
 
 		<springfox-swagger2.version>2.9.2</springfox-swagger2.version>
 
 	</properties>
 	<dependencies>
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-security</artifactId>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -62,11 +67,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.security</groupId>-->
-<!--			<artifactId>spring-security-test</artifactId>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 
 <!--		db dependency start -->
@@ -137,6 +142,37 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${springfox-swagger2.version}</version>
 		</dependency>
+
+<!--		Bean Validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${javax.validation-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate.validator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>${javax.el.validation.version}</version>
+		</dependency>
+
+<!--		JWT-->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>${jjwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>${jaxb-api.version}</version>
+		</dependency>
+
+
 
 	</dependencies>
 

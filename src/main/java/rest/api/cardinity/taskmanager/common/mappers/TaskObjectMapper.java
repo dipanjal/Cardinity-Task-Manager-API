@@ -2,7 +2,7 @@ package rest.api.cardinity.taskmanager.common.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import rest.api.cardinity.taskmanager.common.enums.UserStatus;
+import rest.api.cardinity.taskmanager.common.enums.Status;
 import rest.api.cardinity.taskmanager.common.utils.DateTimeUtils;
 import rest.api.cardinity.taskmanager.models.entity.ProjectEntity;
 import rest.api.cardinity.taskmanager.models.entity.TaskEntity;
@@ -54,14 +54,11 @@ public class TaskObjectMapper {
                                                 UserDetailEntity assignedTo,
                                                 UserDetailEntity updatedBy,
                                                 ProjectEntity projectEntity){
-        if(request.getExpiryHour() > 0){
-            entity.setExpireAt(DateTimeUtils.expireAtHour(request.getExpiryHour()));
-        }
 
-        if(projectEntity != null){
+        if(projectEntity != null)
             entity.setProjectEntity(projectEntity);
-        }
 
+        entity.setExpireAt(DateTimeUtils.expireAtHour(request.getExpiryHour()));
         entity.setName(request.getName());
         entity.setDescription(request.getDescription());
         entity.setStatus(request.getStatus());
@@ -76,7 +73,7 @@ public class TaskObjectMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
-                UserStatus.getValueByCode(entity.getStatus()),
+                Status.getValueByCode(entity.getStatus()),
                 DateTimeUtils.formatDate(entity.getCreatedAt()),
                 DateTimeUtils.formatDate(entity.getUpdatedAt()),
                 entity.getCreatedBy().getName(),

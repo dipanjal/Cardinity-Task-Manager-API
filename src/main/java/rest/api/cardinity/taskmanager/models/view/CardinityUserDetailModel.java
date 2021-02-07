@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDetailModel implements Serializable {
+public class CardinityUserDetailModel implements Serializable {
     private String userName;
     private String fullName;
     private String email;

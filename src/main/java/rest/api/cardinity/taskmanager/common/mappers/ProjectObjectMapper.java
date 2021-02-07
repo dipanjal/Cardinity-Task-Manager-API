@@ -3,14 +3,14 @@ package rest.api.cardinity.taskmanager.common.mappers;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
-import rest.api.cardinity.taskmanager.common.enums.UserStatus;
+import rest.api.cardinity.taskmanager.common.enums.Status;
 import rest.api.cardinity.taskmanager.common.utils.DateTimeUtils;
 import rest.api.cardinity.taskmanager.models.entity.ProjectEntity;
 import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
 import rest.api.cardinity.taskmanager.models.request.project.ProjectCreationRequest;
 import rest.api.cardinity.taskmanager.models.request.project.ProjectUpdateRequest;
 import rest.api.cardinity.taskmanager.models.view.ProjectModel;
-import rest.api.cardinity.taskmanager.models.view.UserDetailModel;
+import rest.api.cardinity.taskmanager.models.view.CardinityUserDetailModel;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -69,13 +69,13 @@ public class ProjectObjectMapper {
     }
 
     public ProjectModel mapToProjectModel(ProjectEntity entity){
-        List<UserDetailModel> assignedUsers = userDetailObjectMapper.mapToUserDetailModel(entity.getUsers());
+        List<CardinityUserDetailModel> assignedUsers = userDetailObjectMapper.mapToUserDetailModel(entity.getUsers());
 
         return new ProjectModel(
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
-                UserStatus.getValueByCode(entity.getStatus()),
+                Status.getValueByCode(entity.getStatus()),
                 DateTimeUtils.formatDate(entity.getCreatedAt()),
                 DateTimeUtils.formatDate(entity.getUpdatedAt()),
                 entity.getCreatedBy().getName(),
