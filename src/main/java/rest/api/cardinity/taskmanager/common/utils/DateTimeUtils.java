@@ -62,4 +62,10 @@ public final class DateTimeUtils {
         return addHour(new Date(), hour);
     }
 
+    public static int convertToMilli(int minute, int calenderFlag){
+        if(Calendar.HOUR == calenderFlag) return 1000 * 60 * 60 * minute;
+        if(Calendar.MINUTE == calenderFlag) return 1000 * 60 * minute;
+        return 0;
+    }
+
 }
