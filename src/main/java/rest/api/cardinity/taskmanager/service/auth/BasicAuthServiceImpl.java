@@ -48,7 +48,7 @@ public class BasicAuthServiceImpl implements IAuthenticationService {
     }
 
     @Override
-    public Response<UserDetails> validateToken(String bearerToken) throws ExpiredJwtException {
+    public Response<UserDetails> validateToken(String bearerToken) {
         if(StringUtils.isBlank(bearerToken) || !StringUtils.startsWith(bearerToken, tokenPrefix))
             return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), "Invalid Bearer Token");
 
