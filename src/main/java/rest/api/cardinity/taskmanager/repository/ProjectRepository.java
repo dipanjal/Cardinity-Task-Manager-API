@@ -3,7 +3,6 @@ package rest.api.cardinity.taskmanager.repository;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import rest.api.cardinity.taskmanager.models.entity.ProjectEntity;
-import rest.api.cardinity.taskmanager.models.entity.UserRoleMapEntity;
 
 import java.util.List;
 import java.util.Optional;

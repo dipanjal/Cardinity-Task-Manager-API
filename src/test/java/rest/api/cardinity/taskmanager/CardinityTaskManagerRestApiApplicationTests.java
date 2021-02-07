@@ -20,10 +20,10 @@ class CardinityTaskManagerRestApiApplicationTests {
 	void contextLoads() {
 	}
 
-	@Test
+/*	@Test
 	void seedDummyUsersTest(){
 		dummyService.createDummies();
-	}
+	}*/
 
 
 

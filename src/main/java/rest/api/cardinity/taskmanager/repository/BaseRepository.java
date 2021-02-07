@@ -9,6 +9,7 @@ import rest.api.cardinity.taskmanager.models.entity.base.BaseUpdatableEntity;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author dipanjal
  * @since 2/6/2021
  */
-public class BaseRepository<T extends BaseEntity> {
+public class BaseRepository<T> {
     @Autowired
     private SessionFactory sessionFactory;
     private Class<T> entityClass;
@@ -49,11 +50,10 @@ public class BaseRepository<T extends BaseEntity> {
 
 
     public void create(T t) {
-        t.setCreatedAt(new Date());
         getSession().save(t);
     }
 
-    public void create(List<T> items) {
+    public void create(Collection<T> items) {
         this.doBatch(items, OPERATION_CREATE);
     }
 
@@ -96,17 +96,13 @@ public class BaseRepository<T extends BaseEntity> {
                 .executeUpdate();
     }
 
-    private void doBatch(List<T> items, int operationType){
+    private void doBatch(Collection<T> items, int operationType){
         Session session = getSession();
         AtomicInteger count = new AtomicInteger(0);
         items.forEach( item -> {
             if (OPERATION_CREATE == operationType) {
-                item.setCreatedAt(new Date());
                 session.save(item);
             } else {
-                if(item instanceof BaseUpdatableEntity){
-                    ((BaseUpdatableEntity) item).setUpdatedAt(new Date());
-                }
                 session.update(item);
             }
 

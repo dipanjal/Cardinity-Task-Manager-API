@@ -15,17 +15,26 @@ import java.util.stream.Collectors;
 @Getter
 public enum SystemUserRole {
 
-    USER(1, "USER"),
-    ADMIN(2, "ADMIN"),
+    USER(1, "USER", "ROLE_USER"),
+    ADMIN(2, "ADMIN", "ROLE_ADMIN"),
     ;
 
     private long code;
     private String value;
+    private String role;
 
     public static String getValueByCode(long code){
         for(SystemUserRole systemUserRole : SystemUserRole.values()){
             if(systemUserRole.getCode() == code)
                 return systemUserRole.getValue();
+        }
+        return "";
+    }
+
+    public static String getRoleByCode(long code){
+        for(SystemUserRole systemUserRole : SystemUserRole.values()){
+            if(systemUserRole.getCode() == code)
+                return systemUserRole.getRole();
         }
         return "";
     }
