@@ -11,7 +11,7 @@ import rest.api.cardinity.taskmanager.common.mappers.UserDetailObjectMapper;
 import rest.api.cardinity.taskmanager.common.utils.ResponseUtils;
 import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
 import rest.api.cardinity.taskmanager.models.response.Response;
-import rest.api.cardinity.taskmanager.models.view.UserDetailModel;
+import rest.api.cardinity.taskmanager.models.view.CardinityUserDetailModel;
 import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
 
 import java.util.ArrayList;
@@ -36,12 +36,12 @@ public class DummyService {
 
 
     @Transactional
-    public Response<List<UserDetailModel>> createDummies(){
+    public Response<List<CardinityUserDetailModel>> createDummies(){
         return this.createDummyUsers();
     }
 
-    private Response<List<UserDetailModel>> createDummyUsers(){
-        Response<List<UserDetailModel>> existingDummiesResponse = this.getDummyUsers();
+    private Response<List<CardinityUserDetailModel>> createDummyUsers(){
+        Response<List<CardinityUserDetailModel>> existingDummiesResponse = this.getDummyUsers();
         if(ResponseCode.isSuccessful(existingDummiesResponse))
             return existingDummiesResponse;
 
@@ -53,12 +53,12 @@ public class DummyService {
     }
 
     @Transactional
-    public Response<List<UserDetailModel>> getDummyUsers(){
+    public Response<List<CardinityUserDetailModel>> getDummyUsers(){
         List<UserDetailEntity> dummyUsers = userDetailRepository.getByUserNames(mapper.getDummyUserNames());
         if(CollectionUtils.isEmpty(dummyUsers))
             return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No Dummy User Found");
 
-        List<UserDetailModel> dummyUserModels = userMapper.mapToUserDetailModel(dummyUsers);
+        List<CardinityUserDetailModel> dummyUserModels = userMapper.mapToUserDetailModel(dummyUsers);
         return ResponseUtils.createSuccessResponse(dummyUserModels);
     }
 

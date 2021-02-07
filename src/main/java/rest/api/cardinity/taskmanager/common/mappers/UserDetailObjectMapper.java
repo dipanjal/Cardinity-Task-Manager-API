@@ -7,7 +7,7 @@ import rest.api.cardinity.taskmanager.common.enums.Status;
 import rest.api.cardinity.taskmanager.common.enums.SystemUserRole;
 import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
 import rest.api.cardinity.taskmanager.models.entity.UserRoleMapEntity;
-import rest.api.cardinity.taskmanager.models.view.UserDetailModel;
+import rest.api.cardinity.taskmanager.models.view.CardinityUserDetailModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 public class UserDetailObjectMapper {
 
     /** @// TODO: 2/6/2021 Need to set role from db */
-    public UserDetailModel mapToUserDetailModel(UserDetailEntity entity){
-        return new UserDetailModel(
+    public CardinityUserDetailModel mapToUserDetailModel(UserDetailEntity entity){
+        return new CardinityUserDetailModel(
                 entity.getUserName(),
                 entity.getName(),
                 entity.getEmail(),
@@ -34,7 +34,7 @@ public class UserDetailObjectMapper {
         );
     }
 
-    public List<UserDetailModel> mapToUserDetailModel(Collection<UserDetailEntity> entityList){
+    public List<CardinityUserDetailModel> mapToUserDetailModel(Collection<UserDetailEntity> entityList){
         return entityList
                 .stream()
                 .map(this::mapToUserDetailModel)

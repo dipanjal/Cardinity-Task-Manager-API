@@ -3,8 +3,7 @@ package rest.api.cardinity.taskmanager.common.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.boot.web.servlet.filter.ApplicationContextHeaderFilter;
-import org.springframework.context.ApplicationContext;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,6 +21,9 @@ public class JWTUtils {
 
     private final static Environment env = ApplicationContextHolder.getContext().getEnvironment();
 
+
+    /* PUBLIC METHODS */
+
     public static String generateToken(UserDetails userDetails){
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userDetails.getUsername());
@@ -30,6 +32,24 @@ public class JWTUtils {
     public static String extractUserName(String token){
         return extractClaim(token, Claims::getSubject);
     }
+
+    public static Date extractExpiration(String token){
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    public static String trimToken(String barerToken){
+        String tokenPrefix = String.format("%s ", getJWTTokenPrefix());
+        return StringUtils.replace(barerToken, tokenPrefix, "");
+    }
+
+    public static boolean validateToken(String token, UserDetails userDetails){
+        return (
+                StringUtils.equals(extractUserName(token), userDetails.getUsername())
+                && !isTokenExpired(token)
+        );
+    }
+
+    /* PRIVATES */
 
     private static String createToken(Map<String, Object> claims, String subject){
         return Jwts.builder()
@@ -51,6 +71,10 @@ public class JWTUtils {
         return env.getProperty("jwt.secret.key");
     }
 
+    private static String getJWTTokenPrefix(){
+        return env.getProperty("jwt.token.prefix");
+    }
+
     private static <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -61,5 +85,9 @@ public class JWTUtils {
                 .setSigningKey(getJWTSecretKey())
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    private static boolean isTokenExpired(String token){
+        return extractExpiration(token).before(new Date());
     }
 }

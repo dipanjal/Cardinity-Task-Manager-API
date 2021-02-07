@@ -34,6 +34,14 @@ class JWTUtilsTests {
 		Assertions.assertNotNull(userName);
 	}
 
+	@Test
+	void trimTokenTest(){
+		String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmb28iLCJleHAiOjE2MTI3MDQ3MTYsImlhdCI6MTYxMjcwNDExNn0.46tjGM7IqfJIOFQVSxWnrB28B-isrlGmdcP2yMQF1-k";
+		String tokenTrimmed = JWTUtils.trimToken(token);
+		String expected = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmb28iLCJleHAiOjE2MTI3MDQ3MTYsImlhdCI6MTYxMjcwNDExNn0.46tjGM7IqfJIOFQVSxWnrB28B-isrlGmdcP2yMQF1-k";
+		Assertions.assertEquals(expected, tokenTrimmed);
+	}
+
 
 
 }

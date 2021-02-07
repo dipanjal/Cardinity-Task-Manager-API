@@ -12,7 +12,7 @@ import rest.api.cardinity.taskmanager.common.mappers.UserDetailObjectMapper;
 import rest.api.cardinity.taskmanager.common.utils.ResponseUtils;
 import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
 import rest.api.cardinity.taskmanager.models.response.Response;
-import rest.api.cardinity.taskmanager.models.view.UserDetailModel;
+import rest.api.cardinity.taskmanager.models.view.CardinityUserDetailModel;
 import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class CardinityUserDetailService extends BaseService implements UserDetai
     protected final UserDetailObjectMapper mapper;
 
     @Transactional(readOnly = true)
-    public Response<List<UserDetailModel>> getAllUsers() {
+    public Response<List<CardinityUserDetailModel>> getAllUsers() {
         List<UserDetailEntity> userDetailEntities = userDetailRepository.getAll();
         if(CollectionUtils.isEmpty(userDetailEntities))
             return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No user found");

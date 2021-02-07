@@ -10,7 +10,7 @@ import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
 import rest.api.cardinity.taskmanager.models.request.project.ProjectCreationRequest;
 import rest.api.cardinity.taskmanager.models.request.project.ProjectUpdateRequest;
 import rest.api.cardinity.taskmanager.models.view.ProjectModel;
-import rest.api.cardinity.taskmanager.models.view.UserDetailModel;
+import rest.api.cardinity.taskmanager.models.view.CardinityUserDetailModel;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -69,7 +69,7 @@ public class ProjectObjectMapper {
     }
 
     public ProjectModel mapToProjectModel(ProjectEntity entity){
-        List<UserDetailModel> assignedUsers = userDetailObjectMapper.mapToUserDetailModel(entity.getUsers());
+        List<CardinityUserDetailModel> assignedUsers = userDetailObjectMapper.mapToUserDetailModel(entity.getUsers());
 
         return new ProjectModel(
                 entity.getId(),
