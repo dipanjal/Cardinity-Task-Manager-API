@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rest.api.cardinity.taskmanager.common.enums.ResponseCode;
-import rest.api.cardinity.taskmanager.common.utils.ResponseUtil;
+import rest.api.cardinity.taskmanager.common.utils.ResponseUtils;
 import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
 import rest.api.cardinity.taskmanager.models.response.Response;
 import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
@@ -24,7 +24,7 @@ public class UserDetailEntityService {
     public Response<UserDetailEntity> getByUserName(String userName){
         Optional<UserDetailEntity> opt = repository.getByUserNameOpt(userName);
         if(opt.isEmpty())
-            return ResponseUtil.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "User not found");
-        return ResponseUtil.createSuccessResponse(opt.get());
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "User not found");
+        return ResponseUtils.createSuccessResponse(opt.get());
     }
 }

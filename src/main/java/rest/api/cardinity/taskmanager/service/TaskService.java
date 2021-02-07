@@ -8,10 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import rest.api.cardinity.taskmanager.common.enums.ResponseCode;
 import rest.api.cardinity.taskmanager.common.enums.TaskStatus;
 import rest.api.cardinity.taskmanager.common.mappers.TaskObjectMapper;
-import rest.api.cardinity.taskmanager.common.utils.ResponseUtil;
+import rest.api.cardinity.taskmanager.common.utils.ResponseUtils;
 import rest.api.cardinity.taskmanager.models.entity.ProjectEntity;
 import rest.api.cardinity.taskmanager.models.entity.TaskEntity;
 import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
+import rest.api.cardinity.taskmanager.models.request.task.BaseTaskRequest;
 import rest.api.cardinity.taskmanager.models.request.task.TaskCreationRequest;
 import rest.api.cardinity.taskmanager.models.request.task.TaskUpdateRequest;
 import rest.api.cardinity.taskmanager.models.response.Response;
@@ -38,33 +39,43 @@ public class TaskService extends BaseService {
 
     @Transactional
     public Response<TaskModel> createNewTask(TaskCreationRequest request, UserDetailEntity currentUser){
+
+        Response<String> modelValidationResponse = this.validateRequestModel(request);
+        if(ResponseCode.isNotSuccessful(modelValidationResponse))
+            return ResponseUtils.copyResponse(modelValidationResponse);
+
         Response<UserDetailEntity> assignmentUserResponse = this.getAssignmentUserDetailResponse(request.getAssignedTo());
         if(ResponseCode.isNotSuccessful(assignmentUserResponse))
-            return ResponseUtil.copyResponse(assignmentUserResponse);
+            return ResponseUtils.copyResponse(assignmentUserResponse);
 
         Response<ProjectEntity> projectResponse = this.getAssignmentProjectResponse(request.getProjectId());
         if(ResponseCode.isNotSuccessful(projectResponse))
-            return ResponseUtil.copyResponse(projectResponse);
+            return ResponseUtils.copyResponse(projectResponse);
 
         TaskEntity entity = mapper.getNewTaskEntity(
                 request, assignmentUserResponse.getItems(),
                 currentUser, projectResponse.getItems()
         );
         taskRepository.create(entity);
-        return ResponseUtil.createSuccessResponse(mapper.mapToTaskModel(entity));
+        return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(entity));
     }
 
     @Transactional
     public Response<TaskModel> updateTask(TaskUpdateRequest request, UserDetailEntity currentUser){
+
+        Response<String> modelValidationResponse = this.validateRequestModel(request);
+        if(ResponseCode.isNotSuccessful(modelValidationResponse))
+            return ResponseUtils.copyResponse(modelValidationResponse);
+
         Optional<TaskEntity> entityOptional = taskRepository.getOpt(request.getTaskId());
         if(entityOptional.isEmpty())
-            return ResponseUtil.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Task Not Found");
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Task Not Found");
 
         UserDetailEntity assignedToUser = entityOptional.get().getAssignedTo();
         if(this.isAssignmentUserUpdatable(entityOptional.get(), request.getAssignedTo())){
             Response<UserDetailEntity> userResponse = this.getAssignmentUserDetailResponse(request.getAssignedTo());
             if(ResponseCode.isNotSuccessful(userResponse))
-                return ResponseUtil.copyResponse(userResponse);
+                return ResponseUtils.copyResponse(userResponse);
             assignedToUser = userResponse.getItems();
         }
 
@@ -72,7 +83,7 @@ public class TaskService extends BaseService {
         if(this.isProjectUpdatable(entityOptional.get(), request.getProjectId())){
             Response<ProjectEntity> projectResponse = this.getAssignmentProjectResponse(request.getProjectId());
             if(ResponseCode.isNotSuccessful(projectResponse))
-                return ResponseUtil.copyResponse(projectResponse);
+                return ResponseUtils.copyResponse(projectResponse);
             projectEntity = projectResponse.getItems();
         }
 
@@ -80,54 +91,54 @@ public class TaskService extends BaseService {
                 entityOptional.get(), request, assignedToUser, currentUser, projectEntity
         );
         taskRepository.update(updatableTaskEntity);
-        return ResponseUtil.createSuccessResponse(mapper.mapToTaskModel(updatableTaskEntity));
+        return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(updatableTaskEntity));
     }
 
     @Transactional(readOnly = true)
     public Response<List<TaskModel>> getAllTasksByProject(long projectId){
         List<TaskEntity> taskEntities = taskRepository.getByProjectId(projectId);
         if(CollectionUtils.isEmpty(taskEntities))
-            return ResponseUtil.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No Task Found for this Project");
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No Task Found for this Project");
 
-        return ResponseUtil.createSuccessResponse(mapper.mapToTaskModel(taskEntities));
+        return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntities));
     }
 
     @Transactional(readOnly = true)
     public Response<List<TaskModel>> getTasksByStatus(int status){
         if(TaskStatus.isInvalidValidStatus(status))
-            return ResponseUtil.createResponse(ResponseCode.BAD_REQUEST.getCode(), "Invalid Status");
+            return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), "Invalid Status");
 
         List<TaskEntity> taskEntities = taskRepository.getByStatus(status);
         if(CollectionUtils.isEmpty(taskEntities))
-            return ResponseUtil.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No Task Found for this Status");
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No Task Found for this Status");
 
-        return ResponseUtil.createSuccessResponse(mapper.mapToTaskModel(taskEntities));
+        return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntities));
     }
 
     @Transactional(readOnly = true)
     public Response<List<TaskModel>> getAllExpiredTasks(){
         List<TaskEntity> taskEntities = taskRepository.getExpiredTasks();
         if(CollectionUtils.isEmpty(taskEntities))
-            return ResponseUtil.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No Expired Task Found");
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No Expired Task Found");
 
-        return ResponseUtil.createSuccessResponse(mapper.mapToTaskModel(taskEntities));
+        return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntities));
     }
 
 
     private Response<UserDetailEntity> getAssignmentUserDetailResponse(String userName){
         Optional<UserDetailEntity> entityOptional = userDetailRepository.getByUserNameOpt(userName);
         if(entityOptional.isEmpty())
-            return ResponseUtil.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Assignment User Not Found");
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Assignment User Not Found");
 
-        return ResponseUtil.createSuccessResponse(entityOptional.get());
+        return ResponseUtils.createSuccessResponse(entityOptional.get());
     }
 
     private Response<ProjectEntity> getAssignmentProjectResponse(long projectId){
         Optional<ProjectEntity> entityOptional = projectRepository.getOpt(projectId);
         if(entityOptional.isEmpty())
-            return ResponseUtil.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Assignment Project Not Found");
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Assignment Project Not Found");
 
-        return ResponseUtil.createSuccessResponse(entityOptional.get());
+        return ResponseUtils.createSuccessResponse(entityOptional.get());
     }
 
     private boolean isAssignmentUserUpdatable(TaskEntity taskEntity, String assignedTo){
@@ -143,6 +154,13 @@ public class TaskService extends BaseService {
             return false;
 
         return (taskEntity.getProjectEntity().getId() != projectId);
+    }
+
+    protected Response<String> validateRequestModel(BaseTaskRequest request) {
+        List<String> violationMessages = request.validate(request);
+        if(CollectionUtils.isNotEmpty(violationMessages))
+            return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), joinResponseMessage(violationMessages));
+        return ResponseUtils.createSuccessResponse(null);
     }
 
 }

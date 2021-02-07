@@ -2,7 +2,7 @@ package rest.api.cardinity.taskmanager.common.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import rest.api.cardinity.taskmanager.common.enums.UserStatus;
+import rest.api.cardinity.taskmanager.common.enums.Status;
 import rest.api.cardinity.taskmanager.common.enums.SystemUserRole;
 import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
 import rest.api.cardinity.taskmanager.models.entity.UserRoleMapEntity;
@@ -28,7 +28,7 @@ public class UserDetailObjectMapper {
                 entity.getEmail(),
                 this.getJoinedUserRoleValues(entity.getUserRoleMaps()),
                 entity.getDesignation(),
-                UserStatus.getValueByCode(entity.getStatus())
+                Status.getValueByCode(entity.getStatus())
         );
     }
 

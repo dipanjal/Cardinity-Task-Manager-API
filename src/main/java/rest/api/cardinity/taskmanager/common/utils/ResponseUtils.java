@@ -11,7 +11,7 @@ import java.util.List;
  * @author dipanjal
  * @since 11/15/2020
  */
-public class ResponseUtil {
+public class ResponseUtils {
 
     public static <T> Response<T> createResponse(int code, String message, T items, Response<T> response){
         response = response == null ? new Response<>() : response;

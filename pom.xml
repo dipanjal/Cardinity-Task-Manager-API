@@ -28,6 +28,11 @@
 		<commons-lang3.version>3.11</commons-lang3.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 
+		<springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+
+		<javax.validation-api.version>2.0.1.Final</javax.validation-api.version>
+		<javax.el.validation.version>3.0.0</javax.el.validation.version>
+		<hibernate.validator.version>6.1.5.Final</hibernate.validator.version>
 
 	</properties>
 	<dependencies>
@@ -113,7 +118,6 @@
 		</dependency>
 		<!-- Json End -->
 
-
 <!--		custom dependencies start -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -126,18 +130,35 @@
 			<version>${commons-collections4.version}</version>
 		</dependency>
 
-		<!--		Prevent Class Not Found Exception-->
-<!--		<dependency>-->
-<!--			<groupId>org.javassist</groupId>-->
-<!--			<artifactId>javassist</artifactId>-->
-<!--			<version>${javaassist.version}</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>cglib</groupId>-->
-<!--			<artifactId>cglib-nodep</artifactId>-->
-<!--			<version>${cglib.nodep.version}</version>-->
-<!--		</dependency>-->
-<!--		custom dependencies end -->
+<!--		Swagger -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${springfox-swagger2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${springfox-swagger2.version}</version>
+		</dependency>
+
+<!--		Bean Validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${javax.validation-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate.validator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>${javax.el.validation.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
