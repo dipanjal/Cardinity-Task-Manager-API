@@ -1,77 +1,10 @@
 {
 	"info": {
-		"_postman_id": "e456eb02-d7d6-4103-9fd8-a884f9462859",
-		"name": "CardinityAPI",
+		"_postman_id": "dd3cc738-d071-472c-ae47-95b328058442",
+		"name": "CardinityAPI Submission",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
-		{
-			"name": "Dummy",
-			"item": [
-				{
-					"name": "Initiate Dummies",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{AuthenticationToken}}",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/dummy/initiate",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"dummy",
-								"initiate"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET Dummy Users",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/dummy/users",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"dummy",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET  User Roles",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/dummy/users/roles",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"dummy",
-								"users",
-								"roles"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
 		{
 			"name": "Project",
 			"item": [
@@ -531,36 +464,7 @@
 			]
 		},
 		{
-			"name": "User",
-			"item": [
-				{
-					"name": "GET All Users",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{AuthenticationToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/user/get-all",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"user",
-								"get-all"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Authenticate",
+			"name": "Cardinity Login",
 			"event": [
 				{
 					"listen": "test",
