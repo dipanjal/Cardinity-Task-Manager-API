@@ -35,8 +35,7 @@ public class TaskService extends BaseService {
 
     private final TaskObjectMapper mapper;
     private final TaskRepository taskRepository;
-    private final UserDetailRepository userDetailRepository;
-//    private final UserDetailEntityService userEntityService;
+    private final UserDetailEntityService userEntityService;
     private final ProjectRepository projectRepository;
 
     @Transactional
@@ -123,12 +122,11 @@ public class TaskService extends BaseService {
     }
 
 
-    private Response<UserDetailEntity> getAssignmentUserDetailResponse(String userName){
-        Optional<UserDetailEntity> entityOptional = userDetailRepository.getByUserNameOpt(userName);
-        if(entityOptional.isEmpty())
-            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Assignment User Not Found");
-
-        return ResponseUtils.createSuccessResponse(entityOptional.get());
+    public Response<UserDetailEntity> getAssignmentUserDetailResponse(String userName){
+        Response<UserDetailEntity> response = userEntityService.getByUserName(userName);
+        if(ResponseCode.isNotSuccessful(response))
+            return ResponseUtils.createResponse(response.getResponseCode(), "Assignment User Not Found");
+        return response;
     }
 
     private Response<ProjectEntity> getAssignmentProjectResponse(long projectId){

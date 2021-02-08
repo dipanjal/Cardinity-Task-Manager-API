@@ -16,11 +16,11 @@ import java.util.Optional;
  * @since 2/7/2021
  */
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserDetailEntityService {
     private final UserDetailRepository repository;
 
-    @Transactional(readOnly = true)
     public Response<UserDetailEntity> getByUserName(String userName){
         Optional<UserDetailEntity> opt = repository.getByUserNameOpt(userName);
         if(opt.isEmpty())
