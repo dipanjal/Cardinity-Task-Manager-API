@@ -1,6 +1,7 @@
 package rest.api.cardinity.taskmanager.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rest.api.cardinity.taskmanager.models.request.project.ProjectCreationRequest;
 import rest.api.cardinity.taskmanager.models.request.project.ProjectUpdateRequest;
@@ -39,4 +40,11 @@ public class ProjectController extends BaseController {
     public Response<List<ProjectModel>> fetchProjectsByUserName(@PathVariable String userName){
         return projectService.getByUserName(userName);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/delete/{id}")
+    public Response<Long> fetchProjectsByUserName(@PathVariable long id){
+        return projectService.deleteProject(id);
+    }
+
 }

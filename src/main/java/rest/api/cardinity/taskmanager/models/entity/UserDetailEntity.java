@@ -1,15 +1,12 @@
 package rest.api.cardinity.taskmanager.models.entity;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import rest.api.cardinity.taskmanager.models.entity.base.BaseEntity;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,7 +29,6 @@ public class UserDetailEntity extends BaseEntity {
     @Column(name = "designation")
     private String designation;
 
-
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "User_Role",
             joinColumns = {@JoinColumn(name = "user_id")},
@@ -40,18 +36,10 @@ public class UserDetailEntity extends BaseEntity {
     )
     Collection<RoleEntity> roles = new HashSet<>();
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.REMOVE })
     @JoinTable(name = "User_Project",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "project_id") }
-    )
+        )
     Set<ProjectEntity> projects = new HashSet<>();
-
-/*    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(name = "User_Tasks",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "task_id") }
-    )
-    Collection<TaskEntity> tasks = new HashSet<>();*/
-
 }

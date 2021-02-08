@@ -15,6 +15,7 @@ import rest.api.cardinity.taskmanager.models.request.project.ProjectUpdateReques
 import rest.api.cardinity.taskmanager.models.response.Response;
 import rest.api.cardinity.taskmanager.models.view.ProjectModel;
 import rest.api.cardinity.taskmanager.repository.ProjectRepository;
+import rest.api.cardinity.taskmanager.repository.service.ProjectEntityService;
 import rest.api.cardinity.taskmanager.repository.service.UserDetailEntityService;
 
 import java.util.Collections;
@@ -31,6 +32,7 @@ import java.util.Set;
 public class ProjectService extends BaseService {
     private final ProjectObjectMapper mapper;
     private final ProjectRepository projectRepository;
+    private final ProjectEntityService projectEntityService;
     private final UserDetailEntityService userEntityService;
 
     @Transactional
@@ -89,14 +91,22 @@ public class ProjectService extends BaseService {
 
     @Transactional(readOnly = true)
     public Response<ProjectModel> getById(long id){
-        Optional<ProjectEntity> entityOptional = projectRepository.getOpt(id);
-        if(entityOptional.isEmpty())
-            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Project Not Found");
-
-        return ResponseUtils.createSuccessResponse(mapper.mapToProjectModel(entityOptional.get()));
+        Response<ProjectEntity> response = projectEntityService.getByIdResponse(id);
+        if(ResponseCode.isNotSuccessful(response))
+            return ResponseUtils.copyResponse(response);
+        return ResponseUtils.createSuccessResponse(mapper.mapToProjectModel(response.getItems()));
     }
 
-    protected Response<String> validateRequestModel(BaseProjectRequest request){
+    @Transactional
+    public Response<Long> deleteProject(long projectId){
+        Response<ProjectEntity> response = projectEntityService.getByIdResponse(projectId);
+        if(ResponseCode.isNotSuccessful(response))
+            return ResponseUtils.copyResponse(response);
+        projectEntityService.delete(response.getItems());
+        return ResponseUtils.createSuccessResponse(projectId);
+    }
+
+    private Response<String> validateRequestModel(BaseProjectRequest request){
         List<String> violationMessages = request.validate(request);
         if(CollectionUtils.isNotEmpty(violationMessages))
             return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), joinResponseMessage(violationMessages));

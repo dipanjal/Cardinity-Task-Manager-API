@@ -2,7 +2,6 @@ package rest.api.cardinity.taskmanager.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rest.api.cardinity.taskmanager.common.enums.ResponseCode;
@@ -19,7 +18,6 @@ import rest.api.cardinity.taskmanager.models.response.Response;
 import rest.api.cardinity.taskmanager.models.view.TaskModel;
 import rest.api.cardinity.taskmanager.repository.ProjectRepository;
 import rest.api.cardinity.taskmanager.repository.TaskRepository;
-import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
 import rest.api.cardinity.taskmanager.repository.service.UserDetailEntityService;
 
 import java.util.List;
@@ -91,6 +89,16 @@ public class TaskService extends BaseService {
         return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(updatableTaskEntity));
     }
 
+    @Transactional
+    public Response<Long> deleteTask(long taskId){
+        Optional<TaskEntity> optionalTaskEntity = taskRepository.getOpt(taskId);
+        if(optionalTaskEntity.isEmpty())
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Task Not Found");
+
+        taskRepository.delete(optionalTaskEntity.get());
+        return ResponseUtils.createSuccessResponse(taskId);
+    }
+
     @Transactional(readOnly = true)
     public Response<List<TaskModel>> getAllTasksByProject(long projectId){
         List<TaskEntity> taskEntities = taskRepository.getByProjectId(projectId);
@@ -136,14 +144,6 @@ public class TaskService extends BaseService {
 
         return ResponseUtils.createSuccessResponse(entityOptional.get());
     }
-
-    /*private boolean isAssignmentUserUpdatable(TaskEntity taskEntity, String assignedTo){
-        if(taskEntity.getAssignedTo() == null)
-            return StringUtils.isNotBlank(assignedTo);
-
-        String alreadyAssignedTo = taskEntity.getAssignedTo().getUserName();
-        return !StringUtils.equals(alreadyAssignedTo, assignedTo);
-    }*/
 
     private boolean isProjectUpdatable(TaskEntity taskEntity, long projectId){
         if(projectId == 0)
