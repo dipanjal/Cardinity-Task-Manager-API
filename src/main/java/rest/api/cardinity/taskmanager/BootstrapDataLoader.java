@@ -1,6 +1,7 @@
 package rest.api.cardinity.taskmanager;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -12,11 +13,15 @@ import rest.api.cardinity.taskmanager.service.DummyService;
  */
 @Component
 @RequiredArgsConstructor
-public class StartupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
+public class BootstrapDataLoader implements ApplicationListener<ContextRefreshedEvent> {
     private final DummyService dummyService;
+
+    @Value("${hibernate.hbm2ddl.auto}")
+    private String ddlAuto;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        dummyService.createDummies();
+        if(ddlAuto.equals("create"))
+            dummyService.createDummies();
     }
 }
