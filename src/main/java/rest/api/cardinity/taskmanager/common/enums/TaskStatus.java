@@ -49,6 +49,18 @@ public enum TaskStatus {
         return !isValidStatus(code);
     }
 
+    public static boolean isValidStatus(String value){
+        return Arrays
+                .stream(TaskStatus.values())
+                .anyMatch( taskStatus -> taskStatus.getValue()
+                        .equalsIgnoreCase(StringUtils.trimToEmpty(value))
+                );
+    }
+
+    public static boolean isInvalidValidStatus(String value){
+        return !isValidStatus(value);
+    }
+
     public static boolean isClosed(int code){
         return (TaskStatus.CLOSED.getCode() == code);
     }

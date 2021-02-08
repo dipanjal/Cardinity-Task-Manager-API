@@ -99,6 +99,14 @@ public class TaskService extends BaseService {
     }
 
     @Transactional(readOnly = true)
+    public Response<List<TaskModel>> getAllTasks() {
+        List<TaskEntity> taskEntityList = taskRepository.getAll();
+        if(CollectionUtils.isEmpty(taskEntityList))
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "To task found");
+        return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntityList));
+    }
+
+    @Transactional(readOnly = true)
     public Response<List<TaskModel>> getAllTasksByProject(long projectId){
         List<TaskEntity> taskEntities = taskRepository.getByProjectId(projectId);
         if(CollectionUtils.isEmpty(taskEntities))
@@ -108,9 +116,11 @@ public class TaskService extends BaseService {
     }
 
     @Transactional(readOnly = true)
-    public Response<List<TaskModel>> getTasksByStatus(int status){
-        if(TaskStatus.isInvalidValidStatus(status))
+    public Response<List<TaskModel>> getTasksByStatus(String statusValue){
+        if(TaskStatus.isInvalidValidStatus(statusValue))
             return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), "Invalid Status");
+
+        int status = TaskStatus.getCodeByValue(statusValue);
 
         List<TaskEntity> taskEntities = taskRepository.getByStatus(status);
         if(CollectionUtils.isEmpty(taskEntities))
@@ -126,6 +136,24 @@ public class TaskService extends BaseService {
             return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No Expired Task Found");
 
         return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntities));
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<TaskModel>> getUserTasks(UserDetailEntity currentUser) {
+        List<TaskEntity> taskEntityList = taskRepository.getByAssignedUserId(currentUser.getId());
+        if(CollectionUtils.isEmpty(taskEntityList))
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No tasks assigned for the user");
+
+        return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntityList));
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<TaskModel>> getUserTasks(String userName) {
+        Response<UserDetailEntity> userEntityResponse = userEntityService.getByUserName(userName);
+        if(ResponseCode.isNotSuccessful(userEntityResponse))
+            return ResponseUtils.copyResponse(userEntityResponse);
+
+        return this.getUserTasks(userEntityResponse.getItems());
     }
 
 
@@ -157,5 +185,4 @@ public class TaskService extends BaseService {
             return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), joinResponseMessage(violationMessages));
         return ResponseUtils.createSuccessResponse(null);
     }
-
 }

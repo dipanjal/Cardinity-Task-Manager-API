@@ -92,11 +92,24 @@ public class ProjectService extends BaseService {
 
     @Transactional(readOnly = true)
     public Response<List<ProjectModel>> getByUserName(String userName){
-        List<ProjectEntity> projectEntities = projectRepository.getByUserName(userName);
-        if(CollectionUtils.isEmpty(projectEntities))
-            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Record Not Found");
+        Response<UserDetailEntity> userEntityResponse = userEntityService.getByUserName(userName);
+        if(ResponseCode.isNotSuccessful(userEntityResponse))
+            return ResponseUtils.copyResponse(userEntityResponse);
 
-        return ResponseUtils.createSuccessResponse(mapper.mapToProjectModel(projectEntities));
+        Set<ProjectEntity> userProjectEntityList = userEntityResponse.getItems().getProjects();
+        if(CollectionUtils.isEmpty(userProjectEntityList))
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No project is assigned to this user");
+
+        return ResponseUtils.createSuccessResponse(mapper.mapToProjectModel(userProjectEntityList));
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<ProjectModel>> getUserProjects(UserDetailEntity currentUser){
+        Collection<ProjectEntity> projectEntities = currentUser.getProjects();
+        if(CollectionUtils.isEmpty(projectEntities))
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "You don't have any assigned Project");
+        List<ProjectModel> projectModels = mapper.mapToProjectModel(projectEntities);
+        return ResponseUtils.createSuccessResponse(projectModels);
     }
 
     @Transactional(readOnly = true)

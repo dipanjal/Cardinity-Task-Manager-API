@@ -75,12 +75,12 @@ public class ProjectObjectMapper {
                 DateTimeUtils.formatDate(entity.getCreatedAt()),
                 DateTimeUtils.formatDate(entity.getUpdatedAt()),
                 entity.getCreatedById(),
-                entity.getUpdatedById(),
-                assignedUserModels
+                entity.getUpdatedById()
+//                assignedUserModels
         );
     }
 
-    public List<ProjectModel> mapToProjectModel(List<ProjectEntity> entityList){
+    public List<ProjectModel> mapToProjectModel(Collection<ProjectEntity> entityList){
         return entityList
                 .stream()
                 .map(this::mapToProjectModel)

@@ -9,6 +9,7 @@ import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
 import rest.api.cardinity.taskmanager.models.response.Response;
 import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**

@@ -1,8 +1,10 @@
 package rest.api.cardinity.taskmanager.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import rest.api.cardinity.taskmanager.common.utils.ResponseUtils;
 import rest.api.cardinity.taskmanager.models.request.project.ProjectCreationRequest;
 import rest.api.cardinity.taskmanager.models.request.project.ProjectUpdateRequest;
 import rest.api.cardinity.taskmanager.models.response.Response;
@@ -31,19 +33,24 @@ public class ProjectController extends BaseController {
         return projectService.updateProject(request, super.getCurrentUser());
     }
 
+    @GetMapping("/get")
+    public Response<List<ProjectModel>> fetchUserProjects(){
+        return projectService.getUserProjects(getCurrentUser());
+    }
+
     @GetMapping("/get-all")
     public Response<List<ProjectModel>> fetchAllProjects(){
         return projectService.getAllProjects();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get-by/{userName}")
-    public Response<List<ProjectModel>> fetchProjectsByUserName(@PathVariable String userName){
+    public Response<?> fetchProjectsByUserName(@PathVariable String userName){
         return projectService.getByUserName(userName);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/delete/{id}")
-    public Response<Long> fetchProjectsByUserName(@PathVariable long id){
+    public Response<Long> delete(@PathVariable long id){
         return projectService.deleteProject(id);
     }
 

@@ -1,6 +1,7 @@
 package rest.api.cardinity.taskmanager.common.mappers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import rest.api.cardinity.taskmanager.common.enums.Status;
 import rest.api.cardinity.taskmanager.common.enums.TaskStatus;
@@ -12,6 +13,7 @@ import rest.api.cardinity.taskmanager.models.request.task.TaskCreationRequest;
 import rest.api.cardinity.taskmanager.models.request.task.TaskUpdateRequest;
 import rest.api.cardinity.taskmanager.models.view.TaskModel;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,6 +79,7 @@ public class TaskObjectMapper {
                 TaskStatus.getValueByCode(entity.getStatus()),
                 DateTimeUtils.formatDate(entity.getCreatedAt()),
                 DateTimeUtils.formatDate(entity.getUpdatedAt()),
+                DateTimeUtils.formatDate(entity.getExpireAt()),
                 entity.getCreatedById(),
                 entity.getUpdatedById(),
                 entity.getAssignedUserId(),
@@ -84,7 +87,7 @@ public class TaskObjectMapper {
         );
     }
 
-    public List<TaskModel> mapToTaskModel(List<TaskEntity> entityList){
+    public List<TaskModel> mapToTaskModel(Collection<TaskEntity> entityList){
         return entityList
                 .stream()
                 .map(this::mapToTaskModel)

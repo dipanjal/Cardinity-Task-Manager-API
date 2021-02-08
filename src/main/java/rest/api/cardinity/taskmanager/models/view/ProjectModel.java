@@ -26,5 +26,5 @@ public class ProjectModel implements Serializable {
     private String updatedAt;
     private long createdBy;
     private long updatedBy;
-    private List<CardinityUserDetailModel> assignedUsers;
+//    private List<CardinityUserDetailModel> assignedUsers;
 }
