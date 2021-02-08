@@ -2,6 +2,7 @@ package rest.api.cardinity.taskmanager.common.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import rest.api.cardinity.taskmanager.common.enums.Status;
 import rest.api.cardinity.taskmanager.models.entity.RoleEntity;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DummyObjectMapper {
     private final Environment env;
+    private final PasswordEncoder passwordEncoder;
 
     public String[] getDummyUserNames(){
         return new String[] {
@@ -32,7 +34,7 @@ public class DummyObjectMapper {
     public UserDetailEntity getNewDummyAdminEntity(RoleEntity role){
         UserDetailEntity entity = new UserDetailEntity();
         entity.setUserName(env.getProperty("dummy.admin.username"));
-        entity.setPassword(env.getProperty("dummy.admin.password.common"));
+        entity.setPassword(passwordEncoder.encode(env.getProperty("dummy.admin.password.common")));
         entity.setName("Dummy Admin 1");
         entity.setEmail("dummyadmin@cardinity.com");
         entity.setDesignation("Dummy System Admin");
@@ -47,7 +49,7 @@ public class DummyObjectMapper {
 
         UserDetailEntity user1 = new UserDetailEntity();
         user1.setUserName(env.getProperty("dummy.user.username"));
-        user1.setPassword(env.getProperty("dummy.user.password.common"));
+        user1.setPassword(passwordEncoder.encode(env.getProperty("dummy.user.password.common")));
         user1.setName("Dummy User 1");
         user1.setEmail("dummyuser1@cardinity.com");
         user1.setDesignation("Cardinity Dummy User");
@@ -57,7 +59,7 @@ public class DummyObjectMapper {
 
         UserDetailEntity user2 = new UserDetailEntity();
         user2.setUserName(env.getProperty("dummy.user2.username"));
-        user2.setPassword(env.getProperty("dummy.user.password.common"));
+        user2.setPassword(passwordEncoder.encode(env.getProperty("dummy.user.password.common")));
         user2.setName("Dummy User 2");
         user2.setEmail("dummyuser2@cardinity.com");
         user2.setDesignation("Cardinity Dummy User 2");
