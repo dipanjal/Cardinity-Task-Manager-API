@@ -69,7 +69,7 @@ public class ResponseUtils {
     }
 
 
-    public static String joinResponseMessgae(List<String> violationMessages){
+    public static String joinResponseMessage(List<String> violationMessages){
         return CollectionUtils.isNotEmpty(violationMessages)
                 ? StringUtils.join(violationMessages, ", ")
                 : "";

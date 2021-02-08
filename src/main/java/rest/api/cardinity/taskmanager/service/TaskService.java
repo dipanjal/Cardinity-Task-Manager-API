@@ -75,6 +75,8 @@ public class TaskService extends BaseService {
         Optional<TaskEntity> entityOptional = taskRepository.getOpt(request.getTaskId());
         if(entityOptional.isEmpty())
             return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Task Not Found");
+        if(TaskStatus.isClosed(entityOptional.get().getStatus()))
+            return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), "Sorry! Cannot edit Closed Task");
 
         UserDetailEntity assignedUser = null;
         if(StringUtils.isNotBlank(request.getAssignedTo())){
@@ -122,10 +124,11 @@ public class TaskService extends BaseService {
             return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), "Invalid Status");
 
         int status = TaskStatus.getCodeByValue(statusValue);
+        statusValue = TaskStatus.getValueByCode(status);
 
         List<TaskEntity> taskEntities = taskRepository.getByStatus(status);
         if(CollectionUtils.isEmpty(taskEntities))
-            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No Task Found for this Status");
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), String.format("No %s Task Found", statusValue));
 
         return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntities));
     }

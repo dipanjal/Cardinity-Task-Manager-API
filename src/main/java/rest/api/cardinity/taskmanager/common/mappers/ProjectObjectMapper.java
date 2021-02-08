@@ -38,7 +38,7 @@ public class ProjectObjectMapper {
         entity.setCreatedById(createdByUser.getId());
         entity.setUpdatedById(createdByUser.getId());
         if(CollectionUtils.isNotEmpty(assignedUsers))
-            entity.setAssignedUsers(assignedUsers);
+            setUserProjectAssociation(entity, assignedUsers);
         return entity;
     }
 
@@ -50,9 +50,8 @@ public class ProjectObjectMapper {
         entity.setStatus(TaskStatus.getCodeByValue(request.getStatus()));
         entity.setUpdatedAt(new Date());
         entity.setUpdatedById(updatedByUser.getId());
-        if(CollectionUtils.isNotEmpty(assignedUsers)){
+        if(CollectionUtils.isNotEmpty(assignedUsers))
             setUserProjectAssociation(entity, assignedUsers);
-        }
 
         return entity;
     }

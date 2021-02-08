@@ -12,6 +12,6 @@ import java.util.List;
 public abstract class BaseService {
 
     protected String joinResponseMessage(List<String> responseMessages){
-        return ResponseUtils.joinResponseMessgae(responseMessages);
+        return ResponseUtils.joinResponseMessage(responseMessages);
     }
 }
