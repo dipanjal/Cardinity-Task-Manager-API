@@ -42,7 +42,7 @@ public class ProjectEntityService {
     }
 
     private void removeProjectAndUserAssociation(ProjectEntity entity){
-        entity.getAssignedUsers().forEach(user -> user.getProjects().clear());
+        entity.getAssignedUsers().forEach(user -> user.setProjects(null));
         entity.getAssignedUsers().clear();
     }
 }
