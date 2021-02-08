@@ -17,9 +17,7 @@ import rest.api.cardinity.taskmanager.models.view.CardinityUserDetailModel;
 import rest.api.cardinity.taskmanager.repository.RoleRepository;
 import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
 
-import java.beans.Transient;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author dipanjal
@@ -45,23 +43,27 @@ public class DummyService {
     }
 
     private Response<List<CardinityUserDetailModel>> createDummyUsers(){
-        Response<Collection<RoleEntity>> roleResponse = this.createRoles();
-        if(ResponseCode.isNotSuccessful(roleResponse))
-            return ResponseUtils.copyResponse(roleResponse);
-        Collection<RoleEntity> roles = roleResponse.getItems();
 
-        Response<List<CardinityUserDetailModel>> existingDummiesResponse = this.getDummyUsers();
-        if(ResponseCode.isSuccessful(existingDummiesResponse))
-            return existingDummiesResponse;
+        Collection<RoleEntity> roles = roleRepository.getAll();
+        if(CollectionUtils.isEmpty(roles)){
+            Response<Collection<RoleEntity>> roleResponse = this.createRoles();
+            if(ResponseCode.isNotSuccessful(roleResponse))
+                return ResponseUtils.copyResponse(roleResponse);
+            roles = roleResponse.getItems();
+        }
 
-        RoleEntity adminRole = roles.stream().filter(role -> role.getName().equals(SystemUserRole.ADMIN.getRole())).findFirst().get();
-        RoleEntity userRole = roles.stream().filter(role -> role.getName().equals(SystemUserRole.USER.getRole())).findFirst().get();
+        List<UserDetailEntity> dummyUsers = userDetailRepository.getByUserNames(mapper.getDummyUserNames());
+        if(CollectionUtils.isEmpty(dummyUsers)){
+            RoleEntity adminRole = roles.stream().filter(role -> role.getName().equals(SystemUserRole.ADMIN.getRole())).findFirst().get();
+            RoleEntity userRole = roles.stream().filter(role -> role.getName().equals(SystemUserRole.USER.getRole())).findFirst().get();
 
-        List<UserDetailEntity> dummyUserEntities = new ArrayList<>();
-        dummyUserEntities.add(mapper.getNewDummyAdminEntity(adminRole));
-        dummyUserEntities.addAll(mapper.getNewDummyUserEntityList(userRole));
-        userDetailRepository.create(dummyUserEntities);
-        return ResponseUtils.createSuccessResponse(userMapper.mapToUserDetailModel(dummyUserEntities));
+            List<UserDetailEntity> dummyUserEntities = new ArrayList<>();
+            dummyUserEntities.add(mapper.getNewDummyAdminEntity(adminRole));
+            dummyUserEntities.addAll(mapper.getNewDummyUserEntityList(userRole));
+            userDetailRepository.create(dummyUserEntities);
+            return ResponseUtils.createSuccessResponse(userMapper.mapToUserDetailModel(dummyUserEntities));
+        }
+        return ResponseUtils.createSuccessResponse(userMapper.mapToUserDetailModel(dummyUsers));
     }
 
     @Transactional
@@ -91,10 +93,4 @@ public class DummyService {
         roleRepository.create(roleEntities);
         return ResponseUtils.createSuccessResponse(roleEntities);
     }
-
-/*    @Transactional
-    public Response<List<UserRoleMapEntity>> getUserRoles(){
-        List<UserRoleMapEntity> userRoleMapEntities = userRoleMapRepository.getAll();
-        return ResponseUtils.createSuccessResponse(userRoleMapEntities);
-    }*/
 }

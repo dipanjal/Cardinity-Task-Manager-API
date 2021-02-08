@@ -2,9 +2,11 @@ package rest.api.cardinity.taskmanager.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rest.api.cardinity.taskmanager.common.enums.ResponseCode;
+import rest.api.cardinity.taskmanager.common.enums.TaskStatus;
 import rest.api.cardinity.taskmanager.common.mappers.ProjectObjectMapper;
 import rest.api.cardinity.taskmanager.common.utils.ResponseUtils;
 import rest.api.cardinity.taskmanager.models.entity.ProjectEntity;
@@ -18,10 +20,7 @@ import rest.api.cardinity.taskmanager.repository.ProjectRepository;
 import rest.api.cardinity.taskmanager.repository.service.ProjectEntityService;
 import rest.api.cardinity.taskmanager.repository.service.UserDetailEntityService;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author dipanjal
@@ -42,11 +41,16 @@ public class ProjectService extends BaseService {
         if(ResponseCode.isNotSuccessful(modelValidationResponse))
             return ResponseUtils.copyResponse(modelValidationResponse);
 
-        Response<UserDetailEntity> assignedUserResponse = userEntityService.getByUserName(request.getAssignedTo());
-        if(ResponseCode.isNotSuccessful(assignedUserResponse))
-            return ResponseUtils.copyResponse(assignedUserResponse);
+        UserDetailEntity assignedUser = null;
+        if(StringUtils.isNotBlank(request.getAssignedTo())){
+            Response<UserDetailEntity> response = userEntityService.getByUserName(request.getAssignedTo());
+            if(ResponseCode.isNotSuccessful(response))
+                return ResponseUtils.copyResponse(response);
+            assignedUser = response.getItems();
+        }
+        Set<UserDetailEntity> assignedUsers = Collections.singleton(assignedUser);
 
-        ProjectEntity entity = mapper.getNewProjectEntity(request, assignedUserResponse.getItems(), currentUser);
+        ProjectEntity entity = mapper.getNewProjectEntity(request, assignedUsers, currentUser);
         projectRepository.create(entity);
         return ResponseUtils.createSuccessResponse(mapper.mapToProjectModel(entity));
     }
@@ -60,11 +64,17 @@ public class ProjectService extends BaseService {
         Optional<ProjectEntity> existingProjectOpt = projectRepository.getOpt(request.getProjectId());
         if(existingProjectOpt.isEmpty())
             return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Invalid project id, Record not found");
+        if(TaskStatus.isClosed(existingProjectOpt.get().getStatus()))
+            return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), "Sorry! Cannot edit closed projects");
 
-        Response<UserDetailEntity> assignedUserResponse = userEntityService.getByUserName(request.getAssignedTo());
-        if(ResponseCode.isNotSuccessful(assignedUserResponse))
-            return ResponseUtils.copyResponse(assignedUserResponse);
-        Set<UserDetailEntity> assignedUsers = Collections.singleton(assignedUserResponse.getItems());
+        UserDetailEntity assignedUser = null;
+        if(StringUtils.isNotBlank(request.getAssignedTo())){
+            Response<UserDetailEntity> response = userEntityService.getByUserName(request.getAssignedTo());
+            if(ResponseCode.isNotSuccessful(response))
+                return ResponseUtils.copyResponse(response);
+            assignedUser = response.getItems();
+        }
+        Set<UserDetailEntity> assignedUsers = Collections.singleton(assignedUser);
 
         ProjectEntity entity = mapper.getUpdatableProjectEntity(existingProjectOpt.get(), request, assignedUsers, currentUser);
         projectRepository.update(entity);
@@ -107,7 +117,12 @@ public class ProjectService extends BaseService {
     }
 
     private Response<String> validateRequestModel(BaseProjectRequest request){
-        List<String> violationMessages = request.validate(request);
+        List<String> violationMessages = new ArrayList<>();
+        if(request instanceof ProjectCreationRequest)
+            violationMessages = ((ProjectCreationRequest)request).validate();
+        else if (request instanceof ProjectUpdateRequest)
+            violationMessages = ((ProjectUpdateRequest)request).validate();
+
         if(CollectionUtils.isNotEmpty(violationMessages))
             return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), joinResponseMessage(violationMessages));
         return ResponseUtils.createSuccessResponse(null);

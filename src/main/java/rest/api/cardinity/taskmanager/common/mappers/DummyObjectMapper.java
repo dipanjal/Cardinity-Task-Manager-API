@@ -25,7 +25,8 @@ public class DummyObjectMapper {
     public String[] getDummyUserNames(){
         return new String[] {
                 env.getProperty("dummy.admin.username"),
-                env.getProperty("dummy.user.username")
+                env.getProperty("dummy.user.username"),
+                "dummy_user2"
         };
     }
 

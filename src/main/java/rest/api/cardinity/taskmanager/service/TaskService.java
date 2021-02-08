@@ -2,6 +2,7 @@ package rest.api.cardinity.taskmanager.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rest.api.cardinity.taskmanager.common.enums.ResponseCode;
@@ -43,16 +44,20 @@ public class TaskService extends BaseService {
         if(ResponseCode.isNotSuccessful(modelValidationResponse))
             return ResponseUtils.copyResponse(modelValidationResponse);
 
-        Response<UserDetailEntity> assignmentUserResponse = this.getAssignmentUserDetailResponse(request.getAssignedTo());
-        if(ResponseCode.isNotSuccessful(assignmentUserResponse))
-            return ResponseUtils.copyResponse(assignmentUserResponse);
+        UserDetailEntity assignedUser = null;
+        if(StringUtils.isNotBlank(request.getAssignedTo())){
+            Response<UserDetailEntity> response = this.getAssignmentUserDetailResponse(request.getAssignedTo());
+            if(ResponseCode.isNotSuccessful(response))
+                return ResponseUtils.copyResponse(response);
+            assignedUser = response.getItems();
+        }
 
         Response<ProjectEntity> projectResponse = this.getAssignmentProjectResponse(request.getProjectId());
         if(ResponseCode.isNotSuccessful(projectResponse))
             return ResponseUtils.copyResponse(projectResponse);
 
         TaskEntity entity = mapper.getNewTaskEntity(
-                request, assignmentUserResponse.getItems(),
+                request, assignedUser,
                 currentUser, projectResponse.getItems()
         );
         taskRepository.create(entity);
@@ -70,9 +75,13 @@ public class TaskService extends BaseService {
         if(entityOptional.isEmpty())
             return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Task Not Found");
 
-        Response<UserDetailEntity> assignmentUserResponse = this.getAssignmentUserDetailResponse(request.getAssignedTo());
-        if(ResponseCode.isNotSuccessful(assignmentUserResponse))
-            return ResponseUtils.copyResponse(assignmentUserResponse);
+        UserDetailEntity assignedUser = null;
+        if(StringUtils.isNotBlank(request.getAssignedTo())){
+            Response<UserDetailEntity> response = this.getAssignmentUserDetailResponse(request.getAssignedTo());
+            if(ResponseCode.isNotSuccessful(response))
+                return ResponseUtils.copyResponse(response);
+            assignedUser = response.getItems();
+        }
 
         ProjectEntity projectEntity = entityOptional.get().getProjectEntity();
         if(this.isProjectUpdatable(entityOptional.get(), request.getProjectId())){
@@ -83,20 +92,10 @@ public class TaskService extends BaseService {
         }
 
         TaskEntity updatableTaskEntity = mapper.getUpdatableTaskEntity(
-                entityOptional.get(), request, assignmentUserResponse.getItems(), currentUser, projectEntity
+                entityOptional.get(), request, assignedUser, currentUser, projectEntity
         );
         taskRepository.update(updatableTaskEntity);
         return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(updatableTaskEntity));
-    }
-
-    @Transactional
-    public Response<Long> deleteTask(long taskId){
-        Optional<TaskEntity> optionalTaskEntity = taskRepository.getOpt(taskId);
-        if(optionalTaskEntity.isEmpty())
-            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Task Not Found");
-
-        taskRepository.delete(optionalTaskEntity.get());
-        return ResponseUtils.createSuccessResponse(taskId);
     }
 
     @Transactional(readOnly = true)
@@ -152,7 +151,7 @@ public class TaskService extends BaseService {
         return (taskEntity.getProjectEntity().getId() != projectId);
     }
 
-    protected Response<String> validateRequestModel(BaseTaskRequest request) {
+    private Response<String> validateRequestModel(BaseTaskRequest request) {
         List<String> violationMessages = request.validate(request);
         if(CollectionUtils.isNotEmpty(violationMessages))
             return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), joinResponseMessage(violationMessages));

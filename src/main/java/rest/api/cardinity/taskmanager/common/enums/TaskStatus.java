@@ -2,6 +2,7 @@ package rest.api.cardinity.taskmanager.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 
@@ -29,6 +30,15 @@ public enum TaskStatus {
         return "";
     }
 
+    public static int getCodeByValue(String value){
+        value = StringUtils.trimToEmpty(value);
+        for(TaskStatus userStatus : TaskStatus.values()){
+            if(userStatus.getValue().equalsIgnoreCase(value))
+                return userStatus.getCode();
+        }
+        return 0;
+    }
+
     public static boolean isValidStatus(int code){
         return Arrays
                 .stream(TaskStatus.values())
@@ -37,5 +47,9 @@ public enum TaskStatus {
 
     public static boolean isInvalidValidStatus(int code){
         return !isValidStatus(code);
+    }
+
+    public static boolean isClosed(int code){
+        return (TaskStatus.CLOSED.getCode() == code);
     }
 }

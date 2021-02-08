@@ -3,6 +3,7 @@ package rest.api.cardinity.taskmanager.common.mappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import rest.api.cardinity.taskmanager.common.enums.Status;
+import rest.api.cardinity.taskmanager.common.enums.TaskStatus;
 import rest.api.cardinity.taskmanager.common.utils.DateTimeUtils;
 import rest.api.cardinity.taskmanager.models.entity.ProjectEntity;
 import rest.api.cardinity.taskmanager.models.entity.TaskEntity;
@@ -25,8 +26,6 @@ public class TaskObjectMapper {
 
     private final ProjectObjectMapper projectObjectMapper;
 
-
-    /** @// TODO: 2/6/2021 Need to check UserDetailEntity: A different object with the same identifier value was already associated with the session */
     public TaskEntity getNewTaskEntity(TaskCreationRequest request,
                                        UserDetailEntity assignedTo,
                                        UserDetailEntity createdByUser,
@@ -37,34 +36,35 @@ public class TaskObjectMapper {
         entity.setName(request.getName());
         entity.setDescription(request.getDescription());
         entity.setExpireAt(DateTimeUtils.expireAtHour(request.getExpiryHour()));
-        entity.setStatus(request.getStatus());
-        entity.setAssignedUserId(assignedTo.getId());
+        entity.setStatus(TaskStatus.getCodeByValue(request.getStatus()));
         entity.setProjectEntity(projectEntity);
         entity.setCreatedAt(new Date());
         entity.setUpdatedAt(new Date());
         entity.setCreatedById(createdByUser.getId());
         entity.setUpdatedById(createdByUser.getId());
 
+        if(assignedTo != null)
+            entity.setAssignedUserId(assignedTo.getId());
+
         return entity;
     }
 
-    /** @// TODO: 2/6/2021 Need to check: A different object with the same identifier value was already associated with the session   */
     public TaskEntity getUpdatableTaskEntity(TaskEntity entity,
                                                 TaskUpdateRequest request,
                                                 UserDetailEntity assignedTo,
                                                 UserDetailEntity updatedBy,
                                                 ProjectEntity projectEntity){
 
-        if(projectEntity != null)
-            entity.setProjectEntity(projectEntity);
-
         entity.setExpireAt(DateTimeUtils.expireAtHour(request.getExpiryHour()));
-        entity.setName(request.getName());
         entity.setDescription(request.getDescription());
-        entity.setStatus(request.getStatus());
-        entity.setAssignedUserId(assignedTo.getId());
+        entity.setStatus(TaskStatus.getCodeByValue(request.getStatus()));
         entity.setUpdatedById(updatedBy.getId());
         entity.setUpdatedAt(new Date());
+
+        if(assignedTo != null)
+            entity.setAssignedUserId(assignedTo.getId());
+        if(projectEntity != null)
+            entity.setProjectEntity(projectEntity);
 
         return entity;
     }
@@ -74,7 +74,7 @@ public class TaskObjectMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
-                Status.getValueByCode(entity.getStatus()),
+                TaskStatus.getValueByCode(entity.getStatus()),
                 DateTimeUtils.formatDate(entity.getCreatedAt()),
                 DateTimeUtils.formatDate(entity.getUpdatedAt()),
                 entity.getCreatedById(),
