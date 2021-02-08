@@ -20,7 +20,7 @@ public enum ResponseCode {
     UNAUTHORIZED(401),
     RUNTIME_ERROR(500),
     REMOTE_ERROR(501),
-    INTERNAL_ERROR(502),
+    INTERNAL_SERVER_ERROR(502),
     ;
 
     private final int code;

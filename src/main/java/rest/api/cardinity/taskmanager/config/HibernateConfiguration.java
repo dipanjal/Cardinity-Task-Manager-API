@@ -15,7 +15,7 @@ import java.util.Properties;
  * @since 2/6/2021
  */
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySource(value = {"classpath:application.properties", "classpath:message.properties"})
 @EnableTransactionManagement
 @ComponentScans(value = {
         @ComponentScan("rest.api.cardinity.taskmanager.repository"),
