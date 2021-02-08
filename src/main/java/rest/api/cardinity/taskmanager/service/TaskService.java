@@ -1,5 +1,6 @@
 package rest.api.cardinity.taskmanager.service;
 
+import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -184,5 +185,16 @@ public class TaskService extends BaseService {
         if(CollectionUtils.isNotEmpty(violationMessages))
             return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), joinResponseMessage(violationMessages));
         return ResponseUtils.createSuccessResponse(null);
+    }
+
+    @Transactional
+    public Response<Long> deleteTask(long id) {
+        Optional<TaskEntity> optionalTaskEntity = taskRepository.getOpt(id);
+        if(optionalTaskEntity.isEmpty())
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No task found");
+        TaskEntity taskEntity = optionalTaskEntity.get();
+        taskEntity.setProjectEntity(null);
+        taskRepository.delete(optionalTaskEntity.get());
+        return ResponseUtils.createSuccessResponse(id);
     }
 }

@@ -31,6 +31,6 @@ public class TaskEntity extends BaseUpdatableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
             optional = false)
-    @JoinColumn(name = "project_id", nullable = false)
+    @JoinColumn(name = "project_id", nullable = false, updatable = false)
     private ProjectEntity projectEntity;
 }

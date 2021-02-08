@@ -61,4 +61,9 @@ public class TaskController extends BaseController {
     public Response<List<TaskModel>> fetchProjectsByUserName(@PathVariable String taskStatus){
         return taskService.getTasksByStatus(taskStatus);
     }
+
+    @GetMapping("/delete/{id}")
+    public Response<Long> deleteTask(@PathVariable long id){
+        return taskService.deleteTask(id);
+    }
 }
