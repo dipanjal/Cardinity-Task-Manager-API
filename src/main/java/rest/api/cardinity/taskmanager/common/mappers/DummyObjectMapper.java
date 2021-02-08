@@ -43,7 +43,7 @@ public class DummyObjectMapper {
         UserDetailEntity entity = new UserDetailEntity();
         entity.setUserName(env.getProperty("dummy.user.username"));
         entity.setPassword(env.getProperty("dummy.user.password"));
-        entity.setName("Cardinity Admin 1");
+        entity.setName("Cardinity User 1");
         entity.setEmail(env.getProperty("dummy.user.email"));
         entity.setDesignation("Cardinity Dummy User");
         entity.setStatus(Status.ACTIVE.getCode());

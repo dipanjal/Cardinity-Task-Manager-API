@@ -24,6 +24,7 @@ public class TaskModel implements Serializable {
     private String createdAt;
     private String updatedAt;
     private String createdBy;
+    private String updatedBy;
     private String assignedTo;
     private ProjectModel project;
 }

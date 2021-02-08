@@ -22,12 +22,12 @@ public class ProjectController extends BaseController {
 
     @PostMapping("/create")
     public Response<ProjectModel> createNewProject(@RequestBody ProjectCreationRequest request){
-        return projectService.createNewProject(request, super.getCurrentDummyUser());
+        return projectService.createNewProject(request, super.getCurrentUser());
     }
 
     @PostMapping("/update")
     public Response<ProjectModel> updateProject(@RequestBody ProjectUpdateRequest request){
-        return projectService.updateProject(request, super.getCurrentDummyUser());
+        return projectService.updateProject(request, super.getCurrentUser());
     }
 
     @GetMapping("/get-all")

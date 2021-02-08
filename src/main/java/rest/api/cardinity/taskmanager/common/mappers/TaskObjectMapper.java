@@ -63,6 +63,7 @@ public class TaskObjectMapper {
         entity.setDescription(request.getDescription());
         entity.setStatus(request.getStatus());
         entity.setAssignedTo(assignedTo);
+//        entity.setUpdatedBy(updatedBy);
         entity.setUpdatedAt(new Date());
 
         return entity;
@@ -77,6 +78,7 @@ public class TaskObjectMapper {
                 DateTimeUtils.formatDate(entity.getCreatedAt()),
                 DateTimeUtils.formatDate(entity.getUpdatedAt()),
                 entity.getCreatedBy().getName(),
+                entity.getUpdatedBy().getName(),
                 entity.getAssignedTo().getName(),
                 projectObjectMapper.mapToProjectModel(entity.getProjectEntity())
         );

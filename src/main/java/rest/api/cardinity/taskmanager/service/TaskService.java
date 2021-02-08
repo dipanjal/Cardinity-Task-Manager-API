@@ -20,6 +20,7 @@ import rest.api.cardinity.taskmanager.models.view.TaskModel;
 import rest.api.cardinity.taskmanager.repository.ProjectRepository;
 import rest.api.cardinity.taskmanager.repository.TaskRepository;
 import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
+import rest.api.cardinity.taskmanager.repository.service.UserDetailEntityService;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,7 @@ public class TaskService extends BaseService {
     private final TaskObjectMapper mapper;
     private final TaskRepository taskRepository;
     private final UserDetailRepository userDetailRepository;
+//    private final UserDetailEntityService userEntityService;
     private final ProjectRepository projectRepository;
 
     @Transactional
@@ -71,13 +73,9 @@ public class TaskService extends BaseService {
         if(entityOptional.isEmpty())
             return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Task Not Found");
 
-        UserDetailEntity assignedToUser = entityOptional.get().getAssignedTo();
-        if(this.isAssignmentUserUpdatable(entityOptional.get(), request.getAssignedTo())){
-            Response<UserDetailEntity> userResponse = this.getAssignmentUserDetailResponse(request.getAssignedTo());
-            if(ResponseCode.isNotSuccessful(userResponse))
-                return ResponseUtils.copyResponse(userResponse);
-            assignedToUser = userResponse.getItems();
-        }
+        Response<UserDetailEntity> assignmentUserResponse = this.getAssignmentUserDetailResponse(request.getAssignedTo());
+        if(ResponseCode.isNotSuccessful(assignmentUserResponse))
+            return ResponseUtils.copyResponse(assignmentUserResponse);
 
         ProjectEntity projectEntity = entityOptional.get().getProjectEntity();
         if(this.isProjectUpdatable(entityOptional.get(), request.getProjectId())){
@@ -88,7 +86,7 @@ public class TaskService extends BaseService {
         }
 
         TaskEntity updatableTaskEntity = mapper.getUpdatableTaskEntity(
-                entityOptional.get(), request, assignedToUser, currentUser, projectEntity
+                entityOptional.get(), request, assignmentUserResponse.getItems(), currentUser, projectEntity
         );
         taskRepository.update(updatableTaskEntity);
         return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(updatableTaskEntity));

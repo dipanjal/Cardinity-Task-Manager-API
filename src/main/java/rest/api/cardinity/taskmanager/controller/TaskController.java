@@ -22,12 +22,12 @@ public class TaskController extends BaseController {
 
     @PostMapping("/create")
     public Response<TaskModel> createNewProject(@RequestBody TaskCreationRequest request){
-        return taskService.createNewTask(request, super.getCurrentDummyUser());
+        return taskService.createNewTask(request, super.getCurrentUser());
     }
 
     @PostMapping("/update")
     public Response<TaskModel> updateProject(@RequestBody TaskUpdateRequest request){
-        return taskService.updateTask(request, super.getCurrentDummyUser());
+        return taskService.updateTask(request, super.getCurrentUser());
     }
 
     @GetMapping("/get-all/expired")

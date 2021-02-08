@@ -43,6 +43,14 @@ public class CardinityUserDetailService extends BaseService implements UserDetai
         return ResponseUtils.createSuccessResponse(mapper.mapToUserDetailModel(userDetailEntities));
     }
 
+    @Transactional(readOnly = true)
+    public Response<CardinityUserDetailModel> getUserByUserName(String userName) {
+        Optional<UserDetailEntity> opt = userDetailRepository.getByUserNameOpt(userName);
+        if(opt.isEmpty())
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No user found");
+        return ResponseUtils.createSuccessResponse(mapper.mapToUserDetailModel(opt.get()));
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {

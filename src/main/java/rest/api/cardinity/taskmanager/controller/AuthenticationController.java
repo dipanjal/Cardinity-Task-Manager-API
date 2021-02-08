@@ -1,7 +1,7 @@
 package rest.api.cardinity.taskmanager.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +20,7 @@ public class AuthenticationController {
 
     private final AuthenticationServiceFactory authServiceFactory;
 
-    @PostMapping("/authenticate")
+    @PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<AuthenticationModel> authenticate(@RequestBody AuthenticationRequest request) {
         return authServiceFactory.getBasicAuthService().authenticate(request);
     }
