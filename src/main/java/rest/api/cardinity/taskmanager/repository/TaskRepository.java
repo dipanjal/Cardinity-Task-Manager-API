@@ -19,6 +19,12 @@ public class TaskRepository extends BaseRepository<TaskEntity> {
         return Optional.ofNullable(super.get(id));
     }
 
+    public List<TaskEntity> getByAssignedUserId(long userId){
+        return getCriteria()
+                .add(Restrictions.eq("assignedUserId", userId))
+                .list();
+    }
+
     public List<TaskEntity> getByProjectId(long projectId){
         return getCriteria()
                 .createAlias("projectEntity", "project")

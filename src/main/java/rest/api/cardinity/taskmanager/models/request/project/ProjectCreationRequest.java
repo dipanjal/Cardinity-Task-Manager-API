@@ -1,6 +1,9 @@
 package rest.api.cardinity.taskmanager.models.request.project;
 
 import lombok.NoArgsConstructor;
+import rest.api.cardinity.taskmanager.common.validation.groups.UserAction;
+
+import java.util.List;
 
 /**
  * @author dipanjal
@@ -8,4 +11,8 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 public class ProjectCreationRequest extends BaseProjectRequest {
+
+    public List<String> validate(){
+        return super.validate(this, UserAction.CREATE.class);
+    }
 }

@@ -1,6 +1,7 @@
 package rest.api.cardinity.taskmanager.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rest.api.cardinity.taskmanager.models.request.task.TaskCreationRequest;
 import rest.api.cardinity.taskmanager.models.request.task.TaskUpdateRequest;
@@ -22,16 +23,32 @@ public class TaskController extends BaseController {
 
     @PostMapping("/create")
     public Response<TaskModel> createNewProject(@RequestBody TaskCreationRequest request){
-        return taskService.createNewTask(request, super.getCurrentDummyUser());
+        return taskService.createNewTask(request, super.getCurrentUser());
     }
 
     @PostMapping("/update")
     public Response<TaskModel> updateProject(@RequestBody TaskUpdateRequest request){
-        return taskService.updateTask(request, super.getCurrentDummyUser());
+        return taskService.updateTask(request, super.getCurrentUser());
+    }
+
+    @GetMapping("/get")
+    public Response<List<TaskModel>> fetchUserTasks(){
+        return taskService.getUserTasks(super.getCurrentUser());
+    }
+
+    @GetMapping("/get-all")
+    public Response<List<TaskModel>> fetchAllTasks(){
+        return taskService.getAllTasks();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/get-all/by-user/{userName}")
+    public Response<List<TaskModel>> fetchAllTasksByProject(@PathVariable String userName){
+        return taskService.getUserTasks(userName);
     }
 
     @GetMapping("/get-all/expired")
-    public Response<List<TaskModel>> fetchAllExpiredTaks(){
+    public Response<List<TaskModel>> fetchAllExpiredTasks(){
         return taskService.getAllExpiredTasks();
     }
 
@@ -41,7 +58,12 @@ public class TaskController extends BaseController {
     }
 
     @GetMapping("/get-by/status/{taskStatus}")
-    public Response<List<TaskModel>> fetchProjectsByUserName(@PathVariable int taskStatus){
+    public Response<List<TaskModel>> fetchProjectsByUserName(@PathVariable String taskStatus){
         return taskService.getTasksByStatus(taskStatus);
+    }
+
+    @GetMapping("/delete/{id}")
+    public Response<Long> deleteTask(@PathVariable long id){
+        return taskService.deleteTask(id);
     }
 }

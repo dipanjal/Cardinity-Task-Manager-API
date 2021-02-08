@@ -9,21 +9,8 @@ import java.util.Date;
 
 public final class DateTimeUtils {
 
-    public DateTimeUtils() {
-    }
-
-    //region Date Format
-    private static final String[] dateFormats = {
-            "dd-MM-yyyy",
-            "dd/MM/yyyy",
-            "dd-MMM-yyyy",
-            "MM/dd/yyyy",
-            "yyyy-MM-dd",
-            "ddMMyyyy"
-    };
-
     public static final String APP_DATE_FORMAT = "dd-MM-yyyy";
-    public static final String API_DATE_FROMAT = "dd-MM-yyyy HH:mm:ss";
+    public static final String ADI_DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
 
 
     public static String formatDate(Date date, String dateFormat) {
@@ -33,7 +20,7 @@ public final class DateTimeUtils {
     }
 
     public static String formatDate(Date date) {
-        return formatDate(date, APP_DATE_FORMAT);
+        return formatDate(date, ADI_DATE_FORMAT);
     }
 
     public static String getCurrentDateString(String dateFormat) {
@@ -60,6 +47,12 @@ public final class DateTimeUtils {
 
     public static Date expireAtHour(int hour){
         return addHour(new Date(), hour);
+    }
+
+    public static int convertToMilli(int minute, int calenderFlag){
+        if(Calendar.HOUR == calenderFlag) return 1000 * 60 * 60 * minute;
+        if(Calendar.MINUTE == calenderFlag) return 1000 * 60 * minute;
+        return 0;
     }
 
 }

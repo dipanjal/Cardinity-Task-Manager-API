@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.catalina.LifecycleState;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,6 +24,7 @@ public class ProjectModel implements Serializable {
     private String status;
     private String createdAt;
     private String updatedAt;
-    private String createdBy;
-    private List<UserDetailModel> assignedUsers;
+    private long createdBy;
+    private long updatedBy;
+//    private List<CardinityUserDetailModel> assignedUsers;
 }
