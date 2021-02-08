@@ -32,12 +32,6 @@ public class UserDetailEntity extends BaseEntity {
     @Column(name = "designation")
     private String designation;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(name = "User_Project",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "project_id") }
-    )
-    Set<ProjectEntity> projects = new HashSet<>();
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "User_Role",
@@ -45,4 +39,19 @@ public class UserDetailEntity extends BaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     Collection<RoleEntity> roles = new HashSet<>();
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "User_Project",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "project_id") }
+    )
+    Set<ProjectEntity> projects = new HashSet<>();
+
+/*    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "User_Tasks",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "task_id") }
+    )
+    Collection<TaskEntity> tasks = new HashSet<>();*/
+
 }

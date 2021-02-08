@@ -17,8 +17,10 @@ import rest.api.cardinity.taskmanager.models.view.ProjectModel;
 import rest.api.cardinity.taskmanager.repository.ProjectRepository;
 import rest.api.cardinity.taskmanager.repository.service.UserDetailEntityService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author dipanjal
@@ -57,7 +59,12 @@ public class ProjectService extends BaseService {
         if(existingProjectOpt.isEmpty())
             return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Invalid project id, Record not found");
 
-        ProjectEntity entity = mapper.getUpdatableProjectEntity(existingProjectOpt.get(), request, currentUser);
+        Response<UserDetailEntity> assignedUserResponse = userEntityService.getByUserName(request.getAssignedTo());
+        if(ResponseCode.isNotSuccessful(assignedUserResponse))
+            return ResponseUtils.copyResponse(assignedUserResponse);
+        Set<UserDetailEntity> assignedUsers = Collections.singleton(assignedUserResponse.getItems());
+
+        ProjectEntity entity = mapper.getUpdatableProjectEntity(existingProjectOpt.get(), request, assignedUsers, currentUser);
         projectRepository.update(entity);
         return ResponseUtils.createSuccessResponse(mapper.mapToProjectModel(entity));
     }

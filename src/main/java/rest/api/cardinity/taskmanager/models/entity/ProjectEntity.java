@@ -27,6 +27,6 @@ public class ProjectEntity extends BaseUpdatableEntity {
     private String description;
 
     @ManyToMany(mappedBy = "projects")
-    private Set<UserDetailEntity> users = new HashSet<>();
+    private Set<UserDetailEntity> assignedUsers = new HashSet<>();
 
 }

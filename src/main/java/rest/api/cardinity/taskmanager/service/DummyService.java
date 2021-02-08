@@ -59,7 +59,7 @@ public class DummyService {
 
         List<UserDetailEntity> dummyUserEntities = new ArrayList<>();
         dummyUserEntities.add(mapper.getNewDummyAdminEntity(adminRole));
-        dummyUserEntities.add(mapper.getNewDummyUserEntity(userRole));
+        dummyUserEntities.addAll(mapper.getNewDummyUserEntityList(userRole));
         userDetailRepository.create(dummyUserEntities);
         return ResponseUtils.createSuccessResponse(userMapper.mapToUserDetailModel(dummyUserEntities));
     }

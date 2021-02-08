@@ -12,10 +12,7 @@ import rest.api.cardinity.taskmanager.models.request.project.ProjectUpdateReques
 import rest.api.cardinity.taskmanager.models.view.ProjectModel;
 import rest.api.cardinity.taskmanager.models.view.CardinityUserDetailModel;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -38,38 +35,41 @@ public class ProjectObjectMapper {
         entity.setStatus(request.getStatus());
         entity.setCreatedAt(new Date());
         entity.setUpdatedAt(new Date());
-        entity.setCreatedBy(createdByUser);
-        entity.setUpdatedBy(createdByUser);
+        entity.setCreatedById(createdByUser.getId());
+        entity.setUpdatedById(createdByUser.getId());
         this.setUserProjectAssociation(entity, assignedUser);
         return entity;
     }
 
     private void setUserProjectAssociation(ProjectEntity entity, UserDetailEntity assignedUser){
-        Set<UserDetailEntity> assignedUsers = CollectionUtils.isEmpty(entity.getUsers())
-                ? new HashSet<>() : entity.getUsers();
+        Set<UserDetailEntity> assignedUsers = CollectionUtils.isEmpty(entity.getAssignedUsers())
+                ? new HashSet<>() : entity.getAssignedUsers();
         assignedUsers.add(assignedUser);
 
         Set<ProjectEntity> assignedProjects = CollectionUtils.isEmpty(assignedUser.getProjects())
                 ? new HashSet<>() : assignedUser.getProjects();
         assignedProjects.add(entity);
 
-        entity.setUsers(assignedUsers);
+        entity.setAssignedUsers(assignedUsers);
         assignedUser.setProjects(assignedProjects);
     }
 
-    public ProjectEntity getUpdatableProjectEntity(ProjectEntity entity, ProjectUpdateRequest request,
+    public ProjectEntity getUpdatableProjectEntity(ProjectEntity entity,
+                                                   ProjectUpdateRequest request,
+                                                   Set<UserDetailEntity> assignedUsers,
                                                    UserDetailEntity updatedByUser){
         entity.setName(request.getName());
         entity.setDescription(request.getDescription());
         entity.setStatus(request.getStatus());
         entity.setUpdatedAt(new Date());
-        entity.setUpdatedBy(updatedByUser);
+        entity.setAssignedUsers(assignedUsers);
+        entity.setUpdatedById(updatedByUser.getId());
 
         return entity;
     }
 
     public ProjectModel mapToProjectModel(ProjectEntity entity){
-        List<CardinityUserDetailModel> assignedUsers = userDetailObjectMapper.mapToUserDetailModel(entity.getUsers());
+        List<CardinityUserDetailModel> assignedUsers = userDetailObjectMapper.mapToUserDetailModel(entity.getAssignedUsers());
 
         return new ProjectModel(
                 entity.getId(),
@@ -78,7 +78,8 @@ public class ProjectObjectMapper {
                 Status.getValueByCode(entity.getStatus()),
                 DateTimeUtils.formatDate(entity.getCreatedAt()),
                 DateTimeUtils.formatDate(entity.getUpdatedAt()),
-                entity.getCreatedBy().getName(),
+                entity.getCreatedById(),
+                entity.getUpdatedById(),
                 assignedUsers
         );
     }

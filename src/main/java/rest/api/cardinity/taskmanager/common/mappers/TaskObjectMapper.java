@@ -38,12 +38,12 @@ public class TaskObjectMapper {
         entity.setDescription(request.getDescription());
         entity.setExpireAt(DateTimeUtils.expireAtHour(request.getExpiryHour()));
         entity.setStatus(request.getStatus());
-        entity.setAssignedTo(assignedTo);
+        entity.setAssignedUserId(assignedTo.getId());
         entity.setProjectEntity(projectEntity);
         entity.setCreatedAt(new Date());
         entity.setUpdatedAt(new Date());
-        entity.setCreatedBy(createdByUser);
-        entity.setUpdatedBy(createdByUser);
+        entity.setCreatedById(createdByUser.getId());
+        entity.setUpdatedById(createdByUser.getId());
 
         return entity;
     }
@@ -62,8 +62,8 @@ public class TaskObjectMapper {
         entity.setName(request.getName());
         entity.setDescription(request.getDescription());
         entity.setStatus(request.getStatus());
-        entity.setAssignedTo(assignedTo);
-//        entity.setUpdatedBy(updatedBy);
+        entity.setAssignedUserId(assignedTo.getId());
+        entity.setUpdatedById(updatedBy.getId());
         entity.setUpdatedAt(new Date());
 
         return entity;
@@ -77,9 +77,9 @@ public class TaskObjectMapper {
                 Status.getValueByCode(entity.getStatus()),
                 DateTimeUtils.formatDate(entity.getCreatedAt()),
                 DateTimeUtils.formatDate(entity.getUpdatedAt()),
-                entity.getCreatedBy().getName(),
-                entity.getUpdatedBy().getName(),
-                entity.getAssignedTo().getName(),
+                entity.getCreatedById(),
+                entity.getUpdatedById(),
+                entity.getAssignedUserId(),
                 projectObjectMapper.mapToProjectModel(entity.getProjectEntity())
         );
     }

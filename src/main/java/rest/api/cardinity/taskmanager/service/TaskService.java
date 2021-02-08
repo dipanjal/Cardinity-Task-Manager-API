@@ -139,13 +139,13 @@ public class TaskService extends BaseService {
         return ResponseUtils.createSuccessResponse(entityOptional.get());
     }
 
-    private boolean isAssignmentUserUpdatable(TaskEntity taskEntity, String assignedTo){
+    /*private boolean isAssignmentUserUpdatable(TaskEntity taskEntity, String assignedTo){
         if(taskEntity.getAssignedTo() == null)
             return StringUtils.isNotBlank(assignedTo);
 
         String alreadyAssignedTo = taskEntity.getAssignedTo().getUserName();
         return !StringUtils.equals(alreadyAssignedTo, assignedTo);
-    }
+    }*/
 
     private boolean isProjectUpdatable(TaskEntity taskEntity, long projectId){
         if(projectId == 0)

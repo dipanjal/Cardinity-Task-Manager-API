@@ -23,9 +23,14 @@ public class TaskEntity extends BaseUpdatableEntity {
     @Column(name = "expire_at")
     private Date expireAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    /*@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "assigned_to")
     private UserDetailEntity assignedTo;
+    */
+
+    @Column(name = "assigned_to")
+    private long assignedUserId;
+
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id", nullable = false)

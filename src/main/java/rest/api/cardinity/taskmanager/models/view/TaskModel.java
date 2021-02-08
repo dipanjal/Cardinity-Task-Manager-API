@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author dipanjal
@@ -23,8 +24,9 @@ public class TaskModel implements Serializable {
     private String status;
     private String createdAt;
     private String updatedAt;
-    private String createdBy;
-    private String updatedBy;
-    private String assignedTo;
+    private long createdBy;
+    private long updatedBy;
+    private long assignedTo;
     private ProjectModel project;
+
 }
