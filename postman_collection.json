@@ -1,0 +1,601 @@
+{
+	"info": {
+		"_postman_id": "e456eb02-d7d6-4103-9fd8-a884f9462859",
+		"name": "CardinityAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Dummy",
+			"item": [
+				{
+					"name": "Initiate Dummies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/dummy/initiate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dummy",
+								"initiate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Dummy Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dummy/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dummy",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET  User Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dummy/users/roles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dummy",
+								"users",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "Create New Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Dev \",\r\n    \"description\": \"Meeting for Requirment Analysis\",\r\n    \"status\": \"open\",\r\n    \"assignedTo\": \"dummy_user2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/project/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"project",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"projectId\": 7,\r\n    \"name\": \"\",\r\n    \"description\": \"Project for Client Meeting\",\r\n    \"status\": \"open\",\r\n    \"assignedTo\": \"dummy_admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/project/update",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"project",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/project/get-all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"project",
+								"get-all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Own Projects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{AuthenticationToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/project/get",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"project",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET  By Username",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/project/get-by/dummy_user2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"project",
+								"get-by",
+								"dummy_user2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Project",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/project/delete/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"project",
+								"delete",
+								"1"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"SOW\",\r\n    \"description\": \"Generate SOW\",\r\n    \"status\": \"open\",\r\n    \"expiryHour\": 8,\r\n    \"assignedTo\":\"dummy_admin\",\r\n    \"projectId\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/task/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"task",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"taskId\": 1,\r\n    \"name\": \"Spring Security Integration\",\r\n    \"description\": \"Spring Security Integration\",\r\n    \"status\": \"in progress\",\r\n    \"expiryHour\": 16,\r\n    \"assignedTo\":\"\",\r\n    \"projectId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/task/update",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"task",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET by Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/task/get-by/status/closed",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"task",
+								"get-by",
+								"status",
+								"closed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET User Own Tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/task/get",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"task",
+								"get"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Task by Username",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{AuthenticationToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/task/get-all/by-user/dummy_user2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"task",
+								"get-all",
+								"by-user",
+								"dummy_user2"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET All Tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{AuthenticationToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/task/get-all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"task",
+								"get-all"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET by Project Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/task/get-all/by-project/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"task",
+								"get-all",
+								"by-project",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET All Expired Tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/task/get-all/expired",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"task",
+								"get-all",
+								"expired"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{AuthenticationToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/task/delete/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"task",
+								"delete",
+								"4"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "GET All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/get-all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"get-all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"AuthenticationToken\", jsonData.items.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"dummy_user\",\r\n    \"password\": \"user\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/authenticate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
