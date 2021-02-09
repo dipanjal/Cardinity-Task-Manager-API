@@ -1,6 +1,5 @@
 package rest.api.cardinity.taskmanager.service.auth;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;

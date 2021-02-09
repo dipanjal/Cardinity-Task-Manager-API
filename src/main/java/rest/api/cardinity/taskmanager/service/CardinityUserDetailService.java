@@ -2,6 +2,9 @@ package rest.api.cardinity.taskmanager.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.context.annotation.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,8 +18,11 @@ import rest.api.cardinity.taskmanager.models.response.Response;
 import rest.api.cardinity.taskmanager.models.view.CardinityUserDetailModel;
 import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author dipanjal
@@ -37,6 +43,14 @@ public class CardinityUserDetailService extends BaseService implements UserDetai
         return ResponseUtils.createSuccessResponse(mapper.mapToUserDetailModel(userDetailEntities));
     }
 
+    @Transactional(readOnly = true)
+    public Response<CardinityUserDetailModel> getUserByUserName(String userName) {
+        Optional<UserDetailEntity> opt = userDetailRepository.getByUserNameOpt(userName);
+        if(opt.isEmpty())
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No user found");
+        return ResponseUtils.createSuccessResponse(mapper.mapToUserDetailModel(opt.get()));
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -45,4 +59,16 @@ public class CardinityUserDetailService extends BaseService implements UserDetai
             throw new UsernameNotFoundException(userName +" User cannot be found");
         return mapper.mapToUserModel(opt.get());
     }
+
+    /*private Collection<? extends GrantedAuthority> getAuthorities(
+            Collection<Role> roles) {
+        return getGrantedAuthorities(getPrivileges(roles));
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(List<String> roles) {
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }*/
+
 }

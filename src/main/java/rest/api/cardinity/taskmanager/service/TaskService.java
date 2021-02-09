@@ -1,5 +1,6 @@
 package rest.api.cardinity.taskmanager.service;
 
+import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +20,7 @@ import rest.api.cardinity.taskmanager.models.response.Response;
 import rest.api.cardinity.taskmanager.models.view.TaskModel;
 import rest.api.cardinity.taskmanager.repository.ProjectRepository;
 import rest.api.cardinity.taskmanager.repository.TaskRepository;
-import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
+import rest.api.cardinity.taskmanager.repository.service.UserDetailEntityService;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class TaskService extends BaseService {
 
     private final TaskObjectMapper mapper;
     private final TaskRepository taskRepository;
-    private final UserDetailRepository userDetailRepository;
+    private final UserDetailEntityService userEntityService;
     private final ProjectRepository projectRepository;
 
     @Transactional
@@ -44,16 +45,20 @@ public class TaskService extends BaseService {
         if(ResponseCode.isNotSuccessful(modelValidationResponse))
             return ResponseUtils.copyResponse(modelValidationResponse);
 
-        Response<UserDetailEntity> assignmentUserResponse = this.getAssignmentUserDetailResponse(request.getAssignedTo());
-        if(ResponseCode.isNotSuccessful(assignmentUserResponse))
-            return ResponseUtils.copyResponse(assignmentUserResponse);
+        UserDetailEntity assignedUser = null;
+        if(StringUtils.isNotBlank(request.getAssignedTo())){
+            Response<UserDetailEntity> response = this.getAssignmentUserDetailResponse(request.getAssignedTo());
+            if(ResponseCode.isNotSuccessful(response))
+                return ResponseUtils.copyResponse(response);
+            assignedUser = response.getItems();
+        }
 
         Response<ProjectEntity> projectResponse = this.getAssignmentProjectResponse(request.getProjectId());
         if(ResponseCode.isNotSuccessful(projectResponse))
             return ResponseUtils.copyResponse(projectResponse);
 
         TaskEntity entity = mapper.getNewTaskEntity(
-                request, assignmentUserResponse.getItems(),
+                request, assignedUser,
                 currentUser, projectResponse.getItems()
         );
         taskRepository.create(entity);
@@ -70,13 +75,15 @@ public class TaskService extends BaseService {
         Optional<TaskEntity> entityOptional = taskRepository.getOpt(request.getTaskId());
         if(entityOptional.isEmpty())
             return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Task Not Found");
+        if(TaskStatus.isClosed(entityOptional.get().getStatus()))
+            return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), "Sorry! Cannot edit Closed Task");
 
-        UserDetailEntity assignedToUser = entityOptional.get().getAssignedTo();
-        if(this.isAssignmentUserUpdatable(entityOptional.get(), request.getAssignedTo())){
-            Response<UserDetailEntity> userResponse = this.getAssignmentUserDetailResponse(request.getAssignedTo());
-            if(ResponseCode.isNotSuccessful(userResponse))
-                return ResponseUtils.copyResponse(userResponse);
-            assignedToUser = userResponse.getItems();
+        UserDetailEntity assignedUser = null;
+        if(StringUtils.isNotBlank(request.getAssignedTo())){
+            Response<UserDetailEntity> response = this.getAssignmentUserDetailResponse(request.getAssignedTo());
+            if(ResponseCode.isNotSuccessful(response))
+                return ResponseUtils.copyResponse(response);
+            assignedUser = response.getItems();
         }
 
         ProjectEntity projectEntity = entityOptional.get().getProjectEntity();
@@ -88,10 +95,18 @@ public class TaskService extends BaseService {
         }
 
         TaskEntity updatableTaskEntity = mapper.getUpdatableTaskEntity(
-                entityOptional.get(), request, assignedToUser, currentUser, projectEntity
+                entityOptional.get(), request, assignedUser, currentUser, projectEntity
         );
         taskRepository.update(updatableTaskEntity);
         return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(updatableTaskEntity));
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<TaskModel>> getAllTasks() {
+        List<TaskEntity> taskEntityList = taskRepository.getAll();
+        if(CollectionUtils.isEmpty(taskEntityList))
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "To task found");
+        return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntityList));
     }
 
     @Transactional(readOnly = true)
@@ -104,13 +119,16 @@ public class TaskService extends BaseService {
     }
 
     @Transactional(readOnly = true)
-    public Response<List<TaskModel>> getTasksByStatus(int status){
-        if(TaskStatus.isInvalidValidStatus(status))
+    public Response<List<TaskModel>> getTasksByStatus(String statusValue){
+        if(TaskStatus.isInvalidValidStatus(statusValue))
             return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), "Invalid Status");
+
+        int status = TaskStatus.getCodeByValue(statusValue);
+        statusValue = TaskStatus.getValueByCode(status);
 
         List<TaskEntity> taskEntities = taskRepository.getByStatus(status);
         if(CollectionUtils.isEmpty(taskEntities))
-            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No Task Found for this Status");
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), String.format("No %s Task Found", statusValue));
 
         return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntities));
     }
@@ -124,13 +142,30 @@ public class TaskService extends BaseService {
         return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntities));
     }
 
+    @Transactional(readOnly = true)
+    public Response<List<TaskModel>> getUserTasks(UserDetailEntity currentUser) {
+        List<TaskEntity> taskEntityList = taskRepository.getByAssignedUserId(currentUser.getId());
+        if(CollectionUtils.isEmpty(taskEntityList))
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No tasks assigned for the user");
 
-    private Response<UserDetailEntity> getAssignmentUserDetailResponse(String userName){
-        Optional<UserDetailEntity> entityOptional = userDetailRepository.getByUserNameOpt(userName);
-        if(entityOptional.isEmpty())
-            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "Assignment User Not Found");
+        return ResponseUtils.createSuccessResponse(mapper.mapToTaskModel(taskEntityList));
+    }
 
-        return ResponseUtils.createSuccessResponse(entityOptional.get());
+    @Transactional(readOnly = true)
+    public Response<List<TaskModel>> getUserTasks(String userName) {
+        Response<UserDetailEntity> userEntityResponse = userEntityService.getByUserName(userName);
+        if(ResponseCode.isNotSuccessful(userEntityResponse))
+            return ResponseUtils.copyResponse(userEntityResponse);
+
+        return this.getUserTasks(userEntityResponse.getItems());
+    }
+
+
+    public Response<UserDetailEntity> getAssignmentUserDetailResponse(String userName){
+        Response<UserDetailEntity> response = userEntityService.getByUserName(userName);
+        if(ResponseCode.isNotSuccessful(response))
+            return ResponseUtils.createResponse(response.getResponseCode(), "Assignment User Not Found");
+        return response;
     }
 
     private Response<ProjectEntity> getAssignmentProjectResponse(long projectId){
@@ -141,14 +176,6 @@ public class TaskService extends BaseService {
         return ResponseUtils.createSuccessResponse(entityOptional.get());
     }
 
-    private boolean isAssignmentUserUpdatable(TaskEntity taskEntity, String assignedTo){
-        if(taskEntity.getAssignedTo() == null)
-            return StringUtils.isNotBlank(assignedTo);
-
-        String alreadyAssignedTo = taskEntity.getAssignedTo().getUserName();
-        return !StringUtils.equals(alreadyAssignedTo, assignedTo);
-    }
-
     private boolean isProjectUpdatable(TaskEntity taskEntity, long projectId){
         if(projectId == 0)
             return false;
@@ -156,11 +183,21 @@ public class TaskService extends BaseService {
         return (taskEntity.getProjectEntity().getId() != projectId);
     }
 
-    protected Response<String> validateRequestModel(BaseTaskRequest request) {
+    private Response<String> validateRequestModel(BaseTaskRequest request) {
         List<String> violationMessages = request.validate(request);
         if(CollectionUtils.isNotEmpty(violationMessages))
             return ResponseUtils.createResponse(ResponseCode.BAD_REQUEST.getCode(), joinResponseMessage(violationMessages));
         return ResponseUtils.createSuccessResponse(null);
     }
 
+    @Transactional
+    public Response<Long> deleteTask(long id) {
+        Optional<TaskEntity> optionalTaskEntity = taskRepository.getOpt(id);
+        if(optionalTaskEntity.isEmpty())
+            return ResponseUtils.createResponse(ResponseCode.RECORD_NOT_FOUND.getCode(), "No task found");
+        TaskEntity taskEntity = optionalTaskEntity.get();
+        taskEntity.setProjectEntity(null);
+        taskRepository.delete(optionalTaskEntity.get());
+        return ResponseUtils.createSuccessResponse(id);
+    }
 }

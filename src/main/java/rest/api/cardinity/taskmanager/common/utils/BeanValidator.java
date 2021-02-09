@@ -36,8 +36,6 @@ public class BeanValidator {
     public static <T, G> List<String> validateBeanAndGetErrors(T model, Class<G>... groups){
 
         Set<ConstraintViolation<T>> violations = validateBean(model, groups);
-
-        if(CollectionUtils.isEmpty(violations)) return null;
         return violations
                 .stream()
                 .map(ConstraintViolation::getMessage)

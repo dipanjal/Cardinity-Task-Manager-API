@@ -1,6 +1,5 @@
 package rest.api.cardinity.taskmanager.common.handlers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,7 +33,7 @@ public class AuthFailureHandler implements AuthenticationEntryPoint {
         res.setStatusCode(HttpStatus.UNAUTHORIZED);
         res.getServletResponse().setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         res.getBody().write(
-                mapper.writeValueAsString(ResponseUtils.createResponse(ResponseCode.UNAUTHORIZED.getCode(), e.getMessage()))
+                mapper.writeValueAsString(ResponseUtils.createResponse(ResponseCode.UNAUTHORIZED.getCode(), "Authentication Failed"))
                         .getBytes()
         );
     }

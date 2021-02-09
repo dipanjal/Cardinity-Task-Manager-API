@@ -9,6 +9,7 @@ import rest.api.cardinity.taskmanager.models.entity.UserDetailEntity;
 import rest.api.cardinity.taskmanager.models.response.Response;
 import rest.api.cardinity.taskmanager.repository.UserDetailRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,11 +17,11 @@ import java.util.Optional;
  * @since 2/7/2021
  */
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserDetailEntityService {
     private final UserDetailRepository repository;
 
-    @Transactional(readOnly = true)
     public Response<UserDetailEntity> getByUserName(String userName){
         Optional<UserDetailEntity> opt = repository.getByUserNameOpt(userName);
         if(opt.isEmpty())

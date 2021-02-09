@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import rest.api.cardinity.taskmanager.models.entity.base.BaseUpdatableEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +23,9 @@ public class ProjectEntity extends BaseUpdatableEntity {
     private String description;
 
     @ManyToMany(mappedBy = "projects")
-    private Set<UserDetailEntity> users = new HashSet<>();
+    private Set<UserDetailEntity> assignedUsers = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
+            mappedBy = "projectEntity", orphanRemoval = true)
+    private Set<TaskEntity> tasks = new HashSet<>();
 }

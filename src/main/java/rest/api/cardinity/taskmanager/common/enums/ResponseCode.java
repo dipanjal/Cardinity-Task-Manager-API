@@ -14,12 +14,13 @@ import rest.api.cardinity.taskmanager.models.response.Response;
 public enum ResponseCode {
 
     OPERATION_SUCCESSFUL(200),
-    BAD_REQUEST(403),
+    BAD_REQUEST(103),
+    FORBIDDEN(403),
     RECORD_NOT_FOUND(404),
     UNAUTHORIZED(401),
     RUNTIME_ERROR(500),
     REMOTE_ERROR(501),
-    INTERNAL_ERROR(502),
+    INTERNAL_SERVER_ERROR(502),
     ;
 
     private final int code;

@@ -4,8 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
+import rest.api.cardinity.taskmanager.common.validation.groups.UserAction;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author dipanjal
@@ -19,4 +21,8 @@ public class ProjectUpdateRequest extends BaseProjectRequest {
     @NotNull(message = "Project ID can not be empty")
     @Range(min = 1, message = "Invalid Project ID")
     private long projectId;
+
+    public List<String> validate(){
+        return super.validate(this, UserAction.UPDATE.class);
+    }
 }
