@@ -33,6 +33,7 @@
 		<jjwt.version>0.9.1</jjwt.version>
 		<jaxb-api.version>2.3.0</jaxb-api.version>
 
+		<springfox-swagger2.version>2.9.2</springfox-swagger2.version>
 
 	</properties>
 	<dependencies>

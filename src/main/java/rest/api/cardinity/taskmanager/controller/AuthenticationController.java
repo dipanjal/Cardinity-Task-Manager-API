@@ -20,7 +20,7 @@ public class AuthenticationController {
 
     private final AuthenticationServiceFactory authServiceFactory;
 
-    @PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/authenticate")
     public Response<AuthenticationModel> authenticate(@RequestBody AuthenticationRequest request) {
         return authServiceFactory.getBasicAuthService().authenticate(request);
     }

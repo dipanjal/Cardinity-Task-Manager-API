@@ -25,7 +25,7 @@ public class UserDetailController {
     private final CardinityUserDetailService cardinityUserDetailService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(value = "/get-all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/get-all")
     public Response<List<CardinityUserDetailModel>> fetchAllUsers(){
         return cardinityUserDetailService.getAllUsers();
     }
