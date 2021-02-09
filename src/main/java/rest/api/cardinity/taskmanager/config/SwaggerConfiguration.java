@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import rest.api.cardinity.taskmanager.common.enums.ResponseCode;
@@ -20,6 +22,7 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static springfox.documentation.builders.PathSelectors.regex;
@@ -76,15 +79,6 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
                 new SecurityReference("JWT", authorizationScopes));
     }
 
-    @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
-
     private Set<String> getContentType() {
         return new HashSet<>(Collections.singleton(MediaType.APPLICATION_JSON_VALUE));
     }
@@ -108,5 +102,25 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
                 new ResponseMessageBuilder().code(ResponseCode.REMOTE_ERROR.getCode()).message(ResponseCode.REMOTE_ERROR.toString()).responseModel(new ModelRef(ResponseCode.REMOTE_ERROR.toString())).build(),
                 new ResponseMessageBuilder().code(ResponseCode.INTERNAL_SERVER_ERROR.getCode()).message(ResponseCode.INTERNAL_SERVER_ERROR.toString()).responseModel(new ModelRef(ResponseCode.INTERNAL_SERVER_ERROR.toString())).build()
         ));
+    }
+
+    @Override
+    protected void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.favorPathExtension(false).
+                favorParameter(true).
+                parameterName("mediaType").
+                ignoreAcceptHeader(true).
+                useJaf(false).
+                defaultContentType(MediaType.APPLICATION_JSON).
+                mediaType("json", MediaType.APPLICATION_JSON);
+    }
+
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 }
