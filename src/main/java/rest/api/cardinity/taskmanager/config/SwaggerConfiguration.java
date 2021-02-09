@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -37,8 +38,8 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
     public Docket api() {
         List<ResponseMessage> globalResponseMessages = this.getGlobalResponseMessages();
         return new Docket(DocumentationType.SWAGGER_2)
-//                .securityContexts(Lists.newArrayList(securityContext()))
-//                .securitySchemes(Lists.newArrayList(apiKey()))
+                .securityContexts(Lists.newArrayList(securityContext()))
+                .securitySchemes(Lists.newArrayList(apiKey()))
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
@@ -85,7 +86,7 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
     }
 
     private Set<String> getContentType() {
-        return new HashSet<>(Arrays.asList("application/json"));
+        return new HashSet<>(Collections.singleton(MediaType.APPLICATION_JSON_VALUE));
     }
 
     private ApiInfo apiInfo() {
@@ -105,7 +106,7 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
                 new ResponseMessageBuilder().code(ResponseCode.BAD_REQUEST.getCode()).message(ResponseCode.BAD_REQUEST.toString()).responseModel(new ModelRef(ResponseCode.BAD_REQUEST.toString())).build(),
                 new ResponseMessageBuilder().code(ResponseCode.RUNTIME_ERROR.getCode()).message(ResponseCode.RUNTIME_ERROR.toString()).responseModel(new ModelRef(ResponseCode.RUNTIME_ERROR.toString())).build(),
                 new ResponseMessageBuilder().code(ResponseCode.REMOTE_ERROR.getCode()).message(ResponseCode.REMOTE_ERROR.toString()).responseModel(new ModelRef(ResponseCode.REMOTE_ERROR.toString())).build(),
-                new ResponseMessageBuilder().code(ResponseCode.INTERNAL_ERROR.getCode()).message(ResponseCode.INTERNAL_ERROR.toString()).responseModel(new ModelRef(ResponseCode.INTERNAL_ERROR.toString())).build()
+                new ResponseMessageBuilder().code(ResponseCode.INTERNAL_SERVER_ERROR.getCode()).message(ResponseCode.INTERNAL_SERVER_ERROR.toString()).responseModel(new ModelRef(ResponseCode.INTERNAL_SERVER_ERROR.toString())).build()
         ));
     }
 }
