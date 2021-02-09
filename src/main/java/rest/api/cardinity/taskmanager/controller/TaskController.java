@@ -3,6 +3,7 @@ package rest.api.cardinity.taskmanager.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import rest.api.cardinity.taskmanager.annotations.CardinityRestController;
 import rest.api.cardinity.taskmanager.models.request.task.TaskCreationRequest;
 import rest.api.cardinity.taskmanager.models.request.task.TaskUpdateRequest;
 import rest.api.cardinity.taskmanager.models.response.Response;
@@ -15,8 +16,10 @@ import java.util.List;
  * @author dipanjal
  * @since 2/5/2021
  */
+
 @RestController
 @RequestMapping("/task")
+@CardinityRestController
 @RequiredArgsConstructor
 public class TaskController extends BaseController {
     private final TaskService taskService;

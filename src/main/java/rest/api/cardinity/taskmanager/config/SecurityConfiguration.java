@@ -11,9 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import rest.api.cardinity.taskmanager.common.filters.JWTRequestFilter;
 import rest.api.cardinity.taskmanager.common.handlers.AuthFailureHandler;
 import rest.api.cardinity.taskmanager.service.CardinityUserDetailService;
@@ -40,12 +40,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers(getAllowedUrls()).permitAll()
+                .antMatchers(getAllowedUrls())
+                .permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().exceptionHandling().authenticationEntryPoint(authFailureHandler);
+                .and().exceptionHandling().authenticationEntryPoint(authFailureHandler)
+//                .and().httpBasic().authenticationEntryPoint(swaggerAuthenticationEntryPoint())
+                .and()
+                    .csrf().disable();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    private String[] getAllowedUrls(){
+        return new String[]{
+                "/authenticate",
+                "/v2/api-docs",
+                "/configuration/ui",
+                "/configuration/security",
+                "/swagger-resources/**",
+                "/null/**",
+                "/swagger-ui.html",
+                "/webjars/**",
+        };
     }
 
     @Override
@@ -59,10 +76,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(11);
     }
 
-    private String[] getAllowedUrls(){
-        return new String[]{
-                "/authenticate",
-                "/dummy/initiate"
-        };
+    @Bean
+    public BasicAuthenticationEntryPoint swaggerAuthenticationEntryPoint() {
+        BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
+        entryPoint.setRealmName("Swagger Realm");
+        return entryPoint;
     }
 }

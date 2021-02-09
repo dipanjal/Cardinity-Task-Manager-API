@@ -5,11 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import rest.api.cardinity.taskmanager.annotations.CardinityRestController;
 import rest.api.cardinity.taskmanager.common.enums.ResponseCode;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -22,14 +19,13 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfiguration extends WebMvcConfigurationSupport {
+public class SwaggerConfiguration {
 
     @Value("${api.version}")
     private String apiVersion;
@@ -44,7 +40,7 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
                 .securityContexts(Lists.newArrayList(securityContext()))
                 .securitySchemes(Lists.newArrayList(apiKey()))
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.withClassAnnotation(CardinityRestController.class))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo())
@@ -85,8 +81,8 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Cardinity Project Management REST API")
-                .description("Cardinity Project Management REST API")
+                .title("Cardinity REST API")
+                .description("A RESTful API Service for Cardinity Project Management Application")
                 .version(apiVersion)
                 .contact(new Contact("Developed by Dipanjal Maitra", "https://github.com/dipanjal", "dipanjalmaitra@gmail.com"))
                 .license("A sample rest api project for cardinity")
@@ -102,25 +98,5 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
                 new ResponseMessageBuilder().code(ResponseCode.REMOTE_ERROR.getCode()).message(ResponseCode.REMOTE_ERROR.toString()).responseModel(new ModelRef(ResponseCode.REMOTE_ERROR.toString())).build(),
                 new ResponseMessageBuilder().code(ResponseCode.INTERNAL_SERVER_ERROR.getCode()).message(ResponseCode.INTERNAL_SERVER_ERROR.toString()).responseModel(new ModelRef(ResponseCode.INTERNAL_SERVER_ERROR.toString())).build()
         ));
-    }
-
-    @Override
-    protected void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.favorPathExtension(false).
-                favorParameter(true).
-                parameterName("mediaType").
-                ignoreAcceptHeader(true).
-                useJaf(false).
-                defaultContentType(MediaType.APPLICATION_JSON).
-                mediaType("json", MediaType.APPLICATION_JSON);
-    }
-
-    @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 }
