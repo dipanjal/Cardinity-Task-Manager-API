@@ -1,10 +1,9 @@
 package rest.api.cardinity.taskmanager.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import rest.api.cardinity.taskmanager.common.utils.ResponseUtils;
+import rest.api.cardinity.taskmanager.annotations.CardinityRestController;
 import rest.api.cardinity.taskmanager.models.request.project.ProjectCreationRequest;
 import rest.api.cardinity.taskmanager.models.request.project.ProjectUpdateRequest;
 import rest.api.cardinity.taskmanager.models.response.Response;
@@ -17,8 +16,10 @@ import java.util.List;
  * @author dipanjal
  * @since 2/5/2021
  */
+
 @RestController
 @RequestMapping("/project")
+@CardinityRestController
 @RequiredArgsConstructor
 public class ProjectController extends BaseController {
     private final ProjectService projectService;
@@ -55,3 +56,4 @@ public class ProjectController extends BaseController {
     }
 
 }
+

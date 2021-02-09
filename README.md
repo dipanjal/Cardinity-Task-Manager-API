@@ -13,9 +13,11 @@ It contains `spring-security` `jwt-token` `role-base-authentication` `jpa-hibern
 * [Maven](https://maven.apache.org/)
 * [Spring Boot](https://spring.io/projects/spring-boot)
 
-### External Tool
+### REST Clients
 Since this is a REST API Service, We need an external `REST Client` to `Test` the API endpoints
 * [Post Man](https://www.postman.com/)
+* [Swagger](http://localhost:8080/swagger-ui.html)
+`localhost:8080/swagger-ui.html`
 
 <!-- GETTING STARTED -->
 ## Getting Started
