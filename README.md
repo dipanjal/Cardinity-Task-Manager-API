@@ -21,7 +21,7 @@ Check all the endpoints from `Swagger`
 ### REST Clients
 Since this is a REST API Service, We need an external `REST Client` to `Test` the API endpoints
 * [Post Man](https://www.postman.com/) `Recomanded`
-* [Swagger](http://localhost:8080/swagger-ui.html) `Authorization In Progress`
+* [Swagger](http://localhost:8080/swagger-ui.html)
 
 ## Install Rest Client
 * If you want to use `Swagger`, You don't need to setup any clint.
