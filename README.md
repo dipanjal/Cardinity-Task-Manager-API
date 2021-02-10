@@ -15,18 +15,20 @@ It contains `spring-security` `jwt-token` `role-base-authentication` `jpa-hibern
 
 ### REST Clients
 Since this is a REST API Service, We need an external `REST Client` to `Test` the API endpoints
-* [Post Man](https://www.postman.com/)
+* [Post Man](https://www.postman.com/) `Recomanded`
 * [Swagger](http://localhost:8080/swagger-ui.html)
-`localhost:8080/swagger-ui.html`
 
-<!-- GETTING STARTED -->
-## Getting Started
+## Install Rest Client
+* If you want to use `Swagger`, You don't need to setup any clint.
+* Postman Installation
+    - Import ``postman_environment.json`` as Postman Environment
+    - Import  ``postman_collection.json`` as Postman Collection.
 
-* Clone the repository
-```bash
-git clone https://github.com/dipanjal/Cardinity-Task-Manager-API.git
-```
-## Installation
+## Lookup
+Lookup all the endpoints from `Swagger` 
+>`http://localhost:8080/swagger-ui.html`
+
+## Install Project
 * Open the `pom.xml` as a <b>Maven Project</b> in your `IDE`
 * Run the command bellow in your `Terminal`
 ```bash
@@ -146,6 +148,12 @@ Only users with `ADMIN` Role can access these endpoints
 
     
 ## Configuration (`Optional`)
+* Server Port Configuration
+```properties
+server.port=8080
+```
+
+
 * We already have a `StartupLoader` to populate the  *Dummy Users* and *Roles*. <b>Username<b> and <b>Password<b> in the `application.property` file
 ```properties
 dummy.admin.username=dummy_admin
