@@ -11,7 +11,7 @@ It contains `spring-security` `jwt-token` `role-base-authentication` `jpa-hibern
 
 ## Quick Lookup 
 Check all the endpoints from `Swagger` 
->`http://localhost:8080/swagger-ui.html`
+> [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 - `NOTE` There are some additional endpoints which might be used for further usage. 
 
 ### Built With
@@ -21,7 +21,7 @@ Check all the endpoints from `Swagger`
 ### REST Clients
 Since this is a REST API Service, We need an external `REST Client` to `Test` the API endpoints
 * [Post Man](https://www.postman.com/) `Recomanded`
-* [Swagger](http://localhost:8080/swagger-ui.html)
+* [Swagger](http://localhost:8080/swagger-ui.html) `Authorization In Progress`
 
 ## Install Rest Client
 * If you want to use `Swagger`, You don't need to setup any clint.
