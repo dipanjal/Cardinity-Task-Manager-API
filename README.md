@@ -25,7 +25,7 @@ Since this is a REST API Service, We need an external `REST Client` to `Test` th
 
 ## Rest Client Config
 * If you want to use `Swagger`, You don't need to configure any client.
-* Postman Installation
+* Postman Configuration
     - Import [postman_environment.json](https://github.com/dipanjal/Cardinity-Task-Manager-API/blob/develop/postman_environment.json)
     as Postman Environment.
     - Import [postman_collection.json](https://github.com/dipanjal/Cardinity-Task-Manager-API/blob/develop/postman_collection.json) 
