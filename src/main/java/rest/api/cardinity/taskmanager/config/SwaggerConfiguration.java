@@ -30,7 +30,7 @@ public class SwaggerConfiguration {
     @Value("${api.version}")
     private String apiVersion;
 
-    public static String AUTHORIZATION_HEADER = "AuthenticationToken";
+    public static String AUTHORIZATION_HEADER = "Authorization";
     public static final String DEFAULT_INCLUDE_PATTERN = "/.*";
 
     @Bean
