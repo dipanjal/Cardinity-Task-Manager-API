@@ -45,9 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().exceptionHandling().authenticationEntryPoint(authFailureHandler)
-//                .and().httpBasic().authenticationEntryPoint(swaggerAuthenticationEntryPoint())
-                .and()
-                    .csrf().disable();
+                .and().csrf().disable();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
@@ -74,12 +72,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder(11);
-    }
-
-    @Bean
-    public BasicAuthenticationEntryPoint swaggerAuthenticationEntryPoint() {
-        BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
-        entryPoint.setRealmName("Swagger Realm");
-        return entryPoint;
     }
 }

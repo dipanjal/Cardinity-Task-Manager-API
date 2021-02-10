@@ -21,7 +21,6 @@ public class BootstrapDataLoader implements ApplicationListener<ContextRefreshed
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        if(ddlAuto.equals("create"))
-            dummyService.createDummies();
+        dummyService.createDummies();
     }
 }

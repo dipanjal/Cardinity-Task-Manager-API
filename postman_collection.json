@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Dev \",\r\n    \"description\": \"Meeting for Requirment Analysis\",\r\n    \"status\": \"open\",\r\n    \"assignedTo\": \"dummy_user2\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Cardinity Web Application Project\",\r\n    \"description\": \"Cardinity Web Application Project\",\r\n    \"status\": \"open\",\r\n    \"assignedTo\": \"dummy_user2\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -123,31 +123,6 @@
 					"response": []
 				},
 				{
-					"name": "GET  By Username",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{AuthenticationToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/project/get-by/dummy_user2",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"project",
-								"get-by",
-								"dummy_user2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "DELETE Project",
 					"request": {
 						"method": "GET",
@@ -197,7 +172,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"SOW\",\r\n    \"description\": \"Generate SOW\",\r\n    \"status\": \"open\",\r\n    \"expiryHour\": 8,\r\n    \"assignedTo\":\"dummy_admin\",\r\n    \"projectId\": 7\r\n}",
+							"raw": "{\r\n    \"name\": \"Configure Spring Boot Project\",\r\n    \"description\": \"Spring Boot Configure\",\r\n    \"status\": \"open\",\r\n    \"expiryHour\": 8,\r\n    \"assignedTo\":\"dummy_user\",\r\n    \"projectId\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -230,7 +205,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"taskId\": 1,\r\n    \"name\": \"Spring Security Integration\",\r\n    \"description\": \"Spring Security Integration\",\r\n    \"status\": \"in progress\",\r\n    \"expiryHour\": 16,\r\n    \"assignedTo\":\"\",\r\n    \"projectId\": 1\r\n}",
+							"raw": "{\r\n    \"taskId\": 3,\r\n    \"name\": \"Spring Security Integration\",\r\n    \"description\": \"Login Module: Integrate Spring Security\",\r\n    \"status\": \"Open\",\r\n    \"expiryHour\": 5,\r\n    \"assignedTo\":\"dummy_user\",\r\n    \"projectId\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -277,7 +252,7 @@
 					"response": []
 				},
 				{
-					"name": "GET User Own Tasks",
+					"name": "GET Own Tasks",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -295,70 +270,6 @@
 							"path": [
 								"task",
 								"get"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET Task by Username",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{AuthenticationToken}}"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/task/get-all/by-user/dummy_user2",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"task",
-								"get-all",
-								"by-user",
-								"dummy_user2"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET All Tasks",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{AuthenticationToken}}"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/task/get-all",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"task",
-								"get-all"
 							],
 							"query": [
 								{
@@ -428,9 +339,14 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Admin Privilage",
+			"item": [
 				{
-					"name": "Delete Task by Id",
+					"name": "GET Task by Username",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -441,14 +357,15 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/task/delete/4",
+							"raw": "{{base_url}}/task/get-all/by-user/dummy_user2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"task",
-								"delete",
-								"4"
+								"get-all",
+								"by-user",
+								"dummy_user2"
 							],
 							"query": [
 								{
@@ -456,6 +373,31 @@
 									"value": null,
 									"disabled": true
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET  By Username",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{AuthenticationToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/project/get-by/dummy_user2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"project",
+								"get-by",
+								"dummy_user2"
 							]
 						}
 					},
