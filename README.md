@@ -9,6 +9,11 @@ A Sample Rest API Project for Cardinity Evaluation Test
 This is a sample REST API Service Cardinity Evaluation Test, has been developed in `spring-boot`.
 It contains `spring-security` `jwt-token` `role-base-authentication` `jpa-hibernate`
 
+## Quick Lookup 
+Check all the endpoints from `Swagger` 
+>`http://localhost:8080/swagger-ui.html`
+- `NOTE` There are some additional endpoints which might be used for further usage. 
+
 ### Built With
 * [Maven](https://maven.apache.org/)
 * [Spring Boot](https://spring.io/projects/spring-boot)
@@ -21,12 +26,10 @@ Since this is a REST API Service, We need an external `REST Client` to `Test` th
 ## Install Rest Client
 * If you want to use `Swagger`, You don't need to setup any clint.
 * Postman Installation
-    - Import ``postman_environment.json`` as Postman Environment
-    - Import  ``postman_collection.json`` as Postman Collection.
-
-## Lookup
-Lookup all the endpoints from `Swagger` 
->`http://localhost:8080/swagger-ui.html`
+    - Import [postman_environment.json](https://github.com/dipanjal/Cardinity-Task-Manager-API/blob/develop/postman_environment.json)
+    as Postman Environment.
+    - Import [postman_collection.json](https://github.com/dipanjal/Cardinity-Task-Manager-API/blob/develop/postman_collection.json) 
+    as Postman Collection.
 
 ## Install Project
 * Open the `pom.xml` as a <b>Maven Project</b> in your `IDE`
