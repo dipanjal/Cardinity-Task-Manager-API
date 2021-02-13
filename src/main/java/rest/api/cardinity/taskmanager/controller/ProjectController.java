@@ -9,6 +9,7 @@ import rest.api.cardinity.taskmanager.models.request.project.ProjectUpdateReques
 import rest.api.cardinity.taskmanager.models.response.Response;
 import rest.api.cardinity.taskmanager.models.view.ProjectModel;
 import rest.api.cardinity.taskmanager.service.ProjectService;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
