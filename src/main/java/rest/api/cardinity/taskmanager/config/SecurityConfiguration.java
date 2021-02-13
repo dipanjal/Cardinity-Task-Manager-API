@@ -53,12 +53,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private String[] getAllowedUrls(){
         return new String[]{
                 "/authenticate",
-                "/v2/api-docs",
+                "/v3/api-docs/**",
+                "/swagger-ui.html",
+                "/swagger-ui/**",
                 "/configuration/ui",
                 "/configuration/security",
                 "/swagger-resources/**",
                 "/null/**",
-                "/swagger-ui.html",
                 "/webjars/**",
         };
     }

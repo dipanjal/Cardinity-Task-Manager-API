@@ -1,5 +1,6 @@
 package rest.api.cardinity.taskmanager.controller;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,6 @@ import rest.api.cardinity.taskmanager.models.request.task.TaskUpdateRequest;
 import rest.api.cardinity.taskmanager.models.response.Response;
 import rest.api.cardinity.taskmanager.models.view.TaskModel;
 import rest.api.cardinity.taskmanager.service.TaskService;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class TaskController extends BaseController {
         return taskService.getUserTasks(super.getCurrentUser());
     }
 
-    @ApiIgnore
+    @Hidden
     @GetMapping("/get-all")
     public Response<List<TaskModel>> fetchAllTasks(){
         return taskService.getAllTasks();
@@ -67,7 +67,7 @@ public class TaskController extends BaseController {
         return taskService.getTasksByStatus(taskStatus);
     }
 
-    @ApiIgnore
+    @Hidden
     @GetMapping("/delete/{id}")
     public Response<Long> deleteTask(@PathVariable long id){
         return taskService.deleteTask(id);
