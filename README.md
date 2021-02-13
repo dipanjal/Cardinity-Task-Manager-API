@@ -38,6 +38,13 @@ Since this is a REST API Service, We need an external `REST Client` to `Test` th
 mvn clean install
 ```
 
+* Configure DB
+```properties
+db.url=jdbc:mysql://localhost:3306/<DB_NAME>
+db.username=<DB_USERNAME>
+db.password=<DB_PASSWORD>
+```
+
 ## User Roles
 Cardinity Users can have bellow Roles
 * USER
